@@ -11,7 +11,7 @@ function App() {
     <Container>
       <Row>
         <Col></Col>
-        <Col xs='6'>
+        <Col lg='8'>
           <CbShare />
         </Col>
         <Col></Col>
