@@ -9,7 +9,7 @@ import CbFile from '../components/CbFile';
 // Share instance component
 export function CbShare() {
     return (
-        <div className='mt-3'>
+        <div>
             <CbUpload />
             <div>
                 <Row className='justify-content-center'>
