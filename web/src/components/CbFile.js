@@ -9,14 +9,25 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 export function CbFile(props) {
     const [isShown, setIsShown] = useState(false);
 
+    function handleIconPath() {
+        const fileName = props.fileName;
+        console.log(fileName);
+        if(fileName && fileName.includes('.')) {
+            const fileType = fileName.split('.').slice(-1);
+            return `../fileIcons/${fileType}.png`
+        } else {
+            return "../fileIcons/file.png"
+        }
+    }
+
     return (
-        <div className="mt-3">
+        <div>
             <Card
                 className="text-center pt-3 pb-3 ps-0 pe-0"
                 onMouseEnter={() => setIsShown(true)}
                 onMouseLeave={() => setIsShown(false)}>
                 <Card.Body>
-                    <Image src="../fileIcons/png.png" width={150} />
+                    <Image src={handleIconPath()} width={150} />
                     <Card.Title className="m-0">{props.fileName}</Card.Title>
 
                 </Card.Body>
