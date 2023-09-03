@@ -122,3 +122,42 @@ func HandleDelete(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Share deleted!")
 }
+
+func HandleDownload(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("Handling download")
+	shareId := r.URL.Query().Get("shareId")
+	sharePath := path.Join("data", "share", shareId)
+
+	fileName := r.URL.Query().Get("fileName")
+	filePath := path.Join(sharePath, fileName)
+
+	// Open file
+	file, err := os.Open(filePath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	// Get file size
+	fileStat, err := file.Stat()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Set headers
+	w.Header().Set("Content-Type", "application/octet-stream")
+	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	w.Header().Set("Content-Length", fmt.Sprint(fileStat.Size()))
+
+	// Send file
+	_, err = io.Copy(w, file)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("File sent!")
+}
