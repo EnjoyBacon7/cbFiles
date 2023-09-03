@@ -50,7 +50,7 @@ export function CbUpload({ loadFiles }) {
         for (let i = 0; i < files.length; i++) {
             data.append('files', files[i]);
         }
-        fetch('/api/upload?shareId=' + shareId, {
+        fetch('/api/upload?shareId=' + encodeURIComponent(shareId), {
             method: 'POST',
             body: data
         }).then(response => {
