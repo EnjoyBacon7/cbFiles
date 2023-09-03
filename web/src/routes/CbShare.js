@@ -25,7 +25,7 @@ export function CbShare() {
             for (let i = 0; i < files.length; i++) {
                 const newComponents = files.map((item) => (
                     <Col className="mt-3" lg={4} key={item.id}>
-                        <CbFile fileName={item} />
+                        <CbFile fileName={item} loadFiles={loadFiles} />
                     </Col>
                     ));
                 setComponents(newComponents);
