@@ -28,7 +28,7 @@ const router = createBrowserRouter([
 // Main App Component
 function App() {
   return (
-    <Container className='mt-3'>
+    <Container>
       <Row>
         <Col></Col>
         <Col lg='8'>
