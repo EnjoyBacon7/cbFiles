@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 // Upload component
-export function CbUpload() {
+export function CbUpload({ loadFiles }) {
 
     let shareId = useParams().shareId;
 
@@ -22,49 +22,52 @@ export function CbUpload() {
         }
     }
 
-    const handleDrop = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         e.stopPropagation();
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             const files = [...e.dataTransfer.files];
-            console.log(files);
             handleUpload(files);
         }
     }
 
     const handleClick = (e) => {
         ref.current.click();
+        handleSubmit(e);
     }
 
     const handleChange = (e) => {
         e.preventDefault();
         if (e.target.files && e.target.files.length > 0) {
             const files = [...e.target.files];
-            console.log(files);
             handleUpload(files);
         }
     }
 
     const handleUpload = (files) => {
-        console.log('/upload/share/' + shareId)
-        files.forEach(file => {
-            const data = new FormData();
-            data.append('file', file);
-            fetch('/api/share/' + shareId, {
-                method: 'POST',
-                body: data
-            }).then(response => {
-                console.log(response);
-            }).catch(error => {
-                console.log(error);
-            });
+        const data = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            data.append('files', files[i]);
+        }
+        fetch('/api/upload?shareId=' + shareId, {
+            method: 'POST',
+            body: data
+        }).then(response => {
+            console.log(response);
+            if (response.ok) {
+                loadFiles();
+            } else {
+                throw new Error("Network response was not ok");
+            }
+        }).catch(error => {
+            console.log(error);
         });
     }
 
     return (
         <div className='d-flex flex-column'>
-            <Form className='d-flex flex-column' onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop} onSubmit={(e) => e.preventDefault()}>
+            <Form className='d-flex flex-column' onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleSubmit} onSubmit={(e) => e.preventDefault()}>
                 <input ref={ref} type='file' className='d-none' onChange={handleChange} multiple />
                 <Button id='uploadDiv' variant={`${dragActive ? 'secondary' : 'outline-secondary'} p-5`} onClick={handleClick}>
                     Add Files Here
