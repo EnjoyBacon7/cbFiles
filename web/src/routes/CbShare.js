@@ -14,6 +14,7 @@ export function CbShare() {
     const shareId = window.location.pathname.split('/')[2];
 
     function loadFiles() {
+        setComponents([]);
         console.log("loading files")
         fetch(`/api/search?shareId=${shareId}`).then(response => {
             if (!response.ok) {
