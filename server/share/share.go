@@ -103,3 +103,22 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("POST on /api/search not supported")
 	}
 }
+
+func HandleDelete(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("Handling delete")
+	shareId := r.URL.Query().Get("shareId")
+	sharePath := path.Join("data", "share", shareId)
+
+	fileName := r.URL.Query().Get("fileName")
+	filePath := path.Join(sharePath, fileName)
+
+	// Delete file
+	err := os.Remove(filePath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("Share deleted!")
+}
