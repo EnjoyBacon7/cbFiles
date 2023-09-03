@@ -18,7 +18,7 @@ export function CbRoot() {
     }
 
     function handleRedirect() {
-        navigate(`/share/${shareId}`);
+        navigate(`/share/${encodeURIComponent(shareId)}`);
     }
 
 
