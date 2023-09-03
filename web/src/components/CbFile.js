@@ -5,18 +5,26 @@ import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
+// Local imports
+import isSupported from '../supportedFileTypes';
+
 // File card component
 export function CbFile(props) {
     const [isShown, setIsShown] = useState(false);
-
+    var fileType;
+    
     function handleIconPath() {
         const fileName = props.fileName;
-        console.log(fileName);
         if(fileName && fileName.includes('.')) {
-            const fileType = fileName.split('.').slice(-1);
-            return `../fileIcons/${fileType}.png`
+            fileType = fileName.split('.').slice(-1);
+            fileType = fileType[0];
         } else {
-            return "../fileIcons/file.png"
+            return '../fileIcons/file.png';
+        }
+        if(isSupported(fileType)) {
+            return `../fileIcons/${fileType}.png`;
+        } else {
+            return '../fileIcons/file.png';
         }
     }
 
