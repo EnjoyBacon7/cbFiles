@@ -89,6 +89,7 @@ func main() {
 	http.HandleFunc("/api/search", share.HandleSearch)
 	http.HandleFunc("/api/upload", share.HandleUpload)
 	http.HandleFunc("/api/delete", share.HandleDelete)
+	http.HandleFunc("/api/download", share.HandleDownload)
 	http.Handle("/", intercept404(fileServer, serveIndex))
 
 	http.ListenAndServe(":8080", nil)
