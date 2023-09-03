@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/esm/Row';
 // Local imports
 import CbUpload from '../components/CbUpload';
 import CbFile from '../components/CbFile';
+import CbHeader from '../components/CbHeader';
 
 // Share instance component
 export function CbShare() {
@@ -42,6 +43,7 @@ export function CbShare() {
 
     return (
         <div>
+            <CbHeader />
             <CbUpload loadFiles={loadFiles}/>
             <div>
                 <Row className='justify-content-center'>

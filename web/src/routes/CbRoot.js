@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import CbUpload from "../components/CbUpload";
 import Form from "react-bootstrap/Form";
 
+// Local imports
+import CbHeader from "../components/CbHeader";
+
 // Root Component
 export function CbRoot() {
 
@@ -21,6 +24,7 @@ export function CbRoot() {
 
     return (
         <div>
+            <CbHeader />
             <CbUpload />
             <Form className="mt-3" onChange={handleChange} onSubmit={handleRedirect}>
                 <Form.Group>
