@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path"
 )
@@ -19,11 +20,27 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-
 		shareId := r.URL.Query().Get("shareId")
+		fmt.Println(shareId)
+		shareId, err = url.QueryUnescape(shareId)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 		sharePath := path.Join("data", "share", shareId)
 		files := r.MultipartForm.File["files"]
 		fmt.Println(files)
+
+		if _, err := os.Stat(sharePath); os.IsNotExist(err) {
+			// Share does not exist
+			// Create share
+			err := os.MkdirAll(sharePath, os.ModePerm)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+		}
+
 		for index, fileHeader := range files {
 			file, err := fileHeader.Open()
 			if err != nil {
