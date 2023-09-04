@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 // Upload component
-export function CbUpload({ reloadCbFilescomponent }) {
+export function CbUpload({ loadFiles }) {
 
     let shareId = useParams().shareId;
 
@@ -56,7 +56,7 @@ export function CbUpload({ reloadCbFilescomponent }) {
         }).then(response => {
             console.log(response);
             if (response.ok) {
-                reloadCbFilescomponent();
+                loadFiles();
             } else {
                 throw new Error("Network response was not ok");
             }
