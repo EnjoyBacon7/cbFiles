@@ -16,7 +16,6 @@ export function CbShare() {
     const [fileInfo, setFileInfo] = useState([]);
 
     function loadFiles() {
-        console.log("loading files")
         fetch(`/api/search?shareId=${shareId}`).then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -24,7 +23,6 @@ export function CbShare() {
             return response.json();
         }).then(data => {
             setFileInfo(data.files)
-            console.log(fileInfo)
             
         }).catch(error => {
             console.log(error);

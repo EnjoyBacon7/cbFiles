@@ -54,7 +54,6 @@ export function CbUpload({ loadFiles }) {
             method: 'POST',
             body: data
         }).then(response => {
-            console.log(response);
             if (response.ok) {
                 loadFiles();
             } else {
