@@ -4,12 +4,7 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-export function CbShareNav() {
-    const [displayMode, setDisplayMode] = useState("list");
-
-    const handleModeChange = (value) => {
-        setDisplayMode(value);
-    };
+export function CbShareNav({ changeViewMode, viewMode }) {
 
     return (
         <div>
@@ -23,8 +18,8 @@ export function CbShareNav() {
                     type="checkbox"
                     variant="outline-secondary"
                     value="list"
-                    checked={displayMode === 'list'}
-                    onChange={() => handleModeChange('list')}
+                    checked={viewMode === 'list'}
+                    onChange={() => changeViewMode('list')}
                     className='d-flex justify-content-center align-items-center col-1'
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list-ul" viewBox="0 0 16 16">
@@ -36,8 +31,8 @@ export function CbShareNav() {
                     type="checkbox"
                     variant="outline-secondary"
                     value="gallery"
-                    checked={displayMode === 'gallery'}
-                    onChange={() => handleModeChange('gallery')}
+                    checked={viewMode === 'gallery'}
+                    onChange={() => changeViewMode('gallery')}
                     className='d-flex justify-content-center align-items-center col-1'
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-grid-fill" viewBox="0 0 16 16">
