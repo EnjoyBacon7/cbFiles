@@ -15,7 +15,6 @@ export function CbFileList(props) {
     const downloadElement = document.createElement('a');
 
     const shareId = window.location.pathname.split('/')[2];
-    const [isShown, setIsShown] = useState(false);
     var fileType;
 
     function handleIconPath() {
@@ -71,8 +70,6 @@ export function CbFileList(props) {
 
         <InputGroup
             className='mt-2'
-            onMouseEnter={() => setIsShown(true)}
-            onMouseLeave={() => setIsShown(false)}
             style={{ flexWrap: 'nowrap' }}
         >
             <InputGroup.Text>
