@@ -70,7 +70,7 @@ export function CbUpload({ reloadCbFilescomponent }) {
             <Form className='d-flex flex-column' onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleSubmit} onSubmit={(e) => e.preventDefault()}>
                 <input ref={ref} type='file' className='d-none' onChange={handleChange} multiple />
                 <Button id='uploadDiv' variant={`${dragActive ? 'secondary' : 'outline-secondary'} p-5`} onClick={handleClick}>
-                    Add Files Here
+                    Drag and drop files here
                 </Button>
             </Form>
         </div>
