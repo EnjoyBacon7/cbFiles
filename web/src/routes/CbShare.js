@@ -1,5 +1,5 @@
 // System imports
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Local imports
 import CbUpload from '../components/CbUpload';
@@ -10,23 +10,38 @@ import CbShareNav from '../components/CbShareNav';
 // Share instance component
 export function CbShare() {
 
-    const [filesReloaded, setFilesReloaded] = useState(false);
+    const shareId = window.location.pathname.split('/')[2];
+
     const [viewMode, setViewMode] = useState("list");
+    const [fileInfo, setFileInfo] = useState([]);
 
-    function reloadCbFilescomponent() {
-        setFilesReloaded(!filesReloaded);
+    function loadFiles() {
+        console.log("loading files")
+        fetch(`/api/search?shareId=${shareId}`).then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        }).then(data => {
+            setFileInfo(data.files)
+            console.log(fileInfo)
+            
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
-    function changeViewMode(mode) {
-        setViewMode(mode);
-    }
+    useEffect(() => {
+        loadFiles();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div>
             <CbHeader />
-            <CbUpload reloadCbFilescomponent={reloadCbFilescomponent} />
-            <CbShareNav changeViewMode={changeViewMode} viewMode={viewMode} />
-            <CbFiles key={filesReloaded} viewMode={viewMode} />
+            <CbUpload loadFiles={loadFiles} />
+            <CbShareNav changeViewMode={setViewMode} viewMode={viewMode} />
+            <CbFiles fileInfo={fileInfo} viewMode={viewMode} loadFiles={loadFiles} />
         </div>
     );
 }

@@ -6,26 +6,17 @@ import { useState, useEffect } from "react";
 import CbFileGallery from "./CbFileGallery";
 import CbFileList from "./CbFileList";
 
-export function CbFiles({ key, viewMode }) {
+export function CbFiles({ fileInfo, viewMode, loadFiles }) {
 
-    const shareId = window.location.pathname.split('/')[2];
     const [components, setComponents] = useState([]);
 
-    function loadFiles() {
-        setComponents([]);
-        console.log("loading files")
-        fetch(`/api/search?shareId=${shareId}`).then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        }).then(data => {
-            const files = data.files;
-            console.log(viewMode)
+    useEffect(() => {
+        console.log(fileInfo)
+        console.log(viewMode)
             if (viewMode === "gallery") {
                 console.log("testGallery")
-                for (let i = 0; i < files.length; i++) {
-                    const newComponents = files.map((item) => (
+                for (let i = 0; i < fileInfo.length; i++) {
+                    const newComponents = fileInfo.map((item) => (
                         <Col className="mt-3" lg={4} key={item.id}>
                             <CbFileGallery fileName={item} loadFiles={loadFiles} />
                         </Col>
@@ -38,8 +29,8 @@ export function CbFiles({ key, viewMode }) {
                 }
             } else if (viewMode === "list") {
                 console.log("testList")
-                for (let i = 0; i < files.length; i++) {
-                    const newComponents = files.map((item) => (
+                for (let i = 0; i < fileInfo.length; i++) {
+                    const newComponents = fileInfo.map((item) => (
                         <CbFileList fileName={item} loadFiles={loadFiles} />
                     ));
                     setComponents(
@@ -49,14 +40,8 @@ export function CbFiles({ key, viewMode }) {
                     );
                 }
             }
-        }).catch(error => {
-            console.log(error);
-        });
-    }
-
-    useEffect(() => {
-        loadFiles();
-    }, [viewMode]);
+            
+    }, [fileInfo, viewMode, loadFiles]);
 
     return (
         <div>
