@@ -2,6 +2,7 @@ import Button from "react-bootstrap/esm/Button";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import InputGroup from "react-bootstrap/esm/InputGroup";
 
 export function CbHeader(props) {
 
@@ -22,12 +23,13 @@ export function CbHeader(props) {
 
     return (
         <div className="mt-3">
-            <ButtonGroup className="d-flex">
-                <Button className="col-lg-2" variant="secondary fw-bold" onClick={goHome}>Home</Button>
-                <Button className="col-lg-10 fw-bold" variant="outline-secondary" disabled>
+
+            <InputGroup className="d-flex">
+            <Button className="col-lg-2" variant="secondary fw-bold" onClick={goHome}>Home</Button>
+                <InputGroup.Text className="col-lg-9 fw-bold" variant="secondary" disabled>
                     {shareId}
-                </Button>
-                <Button variant="outline-secondary" className='d-flex justify-content-center align-items-center col-1' onClick={toggleDarkMode}>
+                </InputGroup.Text>
+                <Button variant="outline-secondary" className='d-flex justify-content-center align-items-center col-lg-1' onClick={toggleDarkMode}>
                     {isDarkMode ?
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-moon-stars-fill" viewBox="0 0 16 16">
                             <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
@@ -38,7 +40,7 @@ export function CbHeader(props) {
                         </svg>
                     }
                 </Button>
-            </ButtonGroup>
+            </InputGroup>
         </div>
     )
 }
