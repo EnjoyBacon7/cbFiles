@@ -11,10 +11,7 @@ export function CbFiles({ fileInfo, viewMode, loadFiles }) {
     const [components, setComponents] = useState([]);
 
     useEffect(() => {
-        console.log(fileInfo)
-        console.log(viewMode)
             if (viewMode === "gallery") {
-                console.log("testGallery")
                 for (let i = 0; i < fileInfo.length; i++) {
                     const newComponents = fileInfo.map((item) => (
                         <Col className="mt-3" lg={4} key={item.id}>
@@ -28,7 +25,6 @@ export function CbFiles({ fileInfo, viewMode, loadFiles }) {
                     );
                 }
             } else if (viewMode === "list") {
-                console.log("testList")
                 for (let i = 0; i < fileInfo.length; i++) {
                     const newComponents = fileInfo.map((item) => (
                         <CbFileList fileName={item} loadFiles={loadFiles} />
