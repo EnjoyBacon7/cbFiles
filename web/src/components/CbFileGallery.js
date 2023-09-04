@@ -9,7 +9,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import isSupported from '../supportedFileTypes';
 
 // File card component
-export function CbFile(props) {
+export function CbFileGallery(props) {
 
     const downloadElement = document.createElement('a');
 
@@ -100,5 +100,4 @@ export function CbFile(props) {
     );
 }
 
-export default CbFile;
-
+export default CbFileGallery;
