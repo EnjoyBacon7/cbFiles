@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 // Upload component
-export function CbUpload({ loadFiles }) {
+export function CbUpload({ reloadCbFilescomponent }) {
 
     let shareId = useParams().shareId;
 
@@ -56,7 +56,7 @@ export function CbUpload({ loadFiles }) {
         }).then(response => {
             console.log(response);
             if (response.ok) {
-                loadFiles();
+                reloadCbFilescomponent();
             } else {
                 throw new Error("Network response was not ok");
             }
@@ -66,7 +66,7 @@ export function CbUpload({ loadFiles }) {
     }
 
     return (
-        <div className='d-flex flex-column mt-3'>
+        <div className='d-flex flex-column mt-3 test-primary'>
             <Form className='d-flex flex-column' onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleSubmit} onSubmit={(e) => e.preventDefault()}>
                 <input ref={ref} type='file' className='d-none' onChange={handleChange} multiple />
                 <Button id='uploadDiv' variant={`${dragActive ? 'secondary' : 'outline-secondary'} p-5`} onClick={handleClick}>
