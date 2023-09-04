@@ -1,9 +1,6 @@
 // System imports
-import React, { useState } from 'react';
-import Image from 'react-bootstrap/Image';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ListGroup from 'react-bootstrap/ListGroup';
 import InputGroup from 'react-bootstrap/InputGroup';
 
 // Local imports
