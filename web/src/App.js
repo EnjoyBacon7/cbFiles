@@ -30,13 +30,13 @@ function App() {
   return (
     <Container fluid>
       <Row>
-        <Col></Col>
-        <Col lg='8'>
+        <Col xs='1' lg='2'></Col>
+        <Col xs='22' lg='8'>
 
           <RouterProvider router={router} />
 
         </Col>
-        <Col></Col>
+        <Col xs='1' lg='2'></Col>
       </Row>
     </Container>
   );
