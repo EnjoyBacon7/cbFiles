@@ -1,6 +1,5 @@
 // System imports
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // Local imports
 import CbUpload from '../components/CbUpload';
@@ -10,8 +9,6 @@ import CbShareNav from '../components/CbShareNav';
 
 // Share instance component
 export function CbShare() {
-
-    const navigate = useNavigate();
 
     const shareId = window.location.pathname.split('/')[2];
 
@@ -33,7 +30,6 @@ export function CbShare() {
             }
             
         }).catch(error => {
-            navigate('/');
             console.log(error);
         });
     }
