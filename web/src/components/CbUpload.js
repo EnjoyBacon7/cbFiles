@@ -13,7 +13,6 @@ export function CbUpload({ loadFiles }) {
     const ref = useRef(null);
 
     const handleDrag = (e) => {
-        e.preventDefault();
         e.stopPropagation();
         if(e.type === 'dragenter' || e.type === 'dragover') {
             setDragActive(true);
