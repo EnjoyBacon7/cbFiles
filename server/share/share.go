@@ -78,6 +78,8 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 		shareId := r.URL.Query().Get("shareId")
 		sharePath := path.Join("data", "share", shareId)
 
+		var filesJSON []string
+
 		if _, err := os.Stat(sharePath); !os.IsNotExist(err) {
 			// Share exists
 
@@ -88,13 +90,17 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			var filesJSON []string
 			for _, file := range files {
 				filesJSON = append(filesJSON, file.Name())
 			}
 
-			responseData := map[string][]string{
-				"files": filesJSON,
+			if len(filesJSON) == 0 {
+				filesJSON = []string{}
+			}
+
+			responseData := map[string]interface{}{
+				"exists": 1,
+				"files":  filesJSON,
 			}
 
 			responseJSON, err := json.Marshal(responseData)
@@ -104,6 +110,7 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 			}
 
 			w.Header().Set("Content-Type", "application/json")
+			fmt.Println(filesJSON)
 			w.Write(responseJSON)
 			fmt.Println("Share exists")
 			return
@@ -112,8 +119,18 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 
 			// Return empty JSON array
 			w.Header().Set("Content-Type", "application/json")
-			w.Write([]byte("[]"))
-			fmt.Println("Share does not exist")
+			responseData := map[string]interface{}{
+				"exists": 0,
+				"files":  filesJSON,
+			}
+			responseJSON, err := json.Marshal(responseData)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			w.Write(responseJSON)
+
+			fmt.Println("Share is empty")
 			return
 		}
 	case "POST":
@@ -177,4 +194,20 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("File sent!")
+}
+
+func HandleCreate(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("Handling create")
+	shareId := r.URL.Query().Get("shareId")
+	sharePath := path.Join("data", "share", shareId)
+
+	// Create share
+	err := os.MkdirAll(sharePath, os.ModePerm)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("Share created!")
 }
