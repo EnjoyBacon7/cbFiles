@@ -7,16 +7,19 @@ import (
 	"os"
 	"strings"
 
-	"github.com/EnjoyBacon7/cbFiles/server/share"
+	// Importing handlers package
+	"github.com/EnjoyBacon7/cbFiles/server/handlers"
 )
 
+// ------------------------------------------------------------
+// Functionnal Black Box stolen from https://hackandsla.sh/posts/2021-11-06-serve-spa-from-go/
+// ------------------------------------------------------------
 type hookedResponseWriter struct {
 	http.ResponseWriter
 	got404 bool
 }
 
 func (hrw *hookedResponseWriter) WriteHeader(status int) {
-	fmt.Println("WriteHeader")
 	if status == http.StatusNotFound {
 		// Don't actually write the 404 header, just set a flag.
 		hrw.got404 = true
@@ -26,7 +29,6 @@ func (hrw *hookedResponseWriter) WriteHeader(status int) {
 }
 
 func (hrw *hookedResponseWriter) Write(p []byte) (int, error) {
-	fmt.Println("Write")
 	if hrw.got404 {
 		// No-op, but pretend that we wrote len(p) bytes to the writer.
 		return len(p), nil
@@ -36,7 +38,7 @@ func (hrw *hookedResponseWriter) Write(p []byte) (int, error) {
 }
 
 func intercept404(handler, on404 http.Handler) http.Handler {
-	fmt.Println("intercept404")
+	fmt.Println("Intercept 404 on ", handler)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		hookedWriter := &hookedResponseWriter{ResponseWriter: w}
 		handler.ServeHTTP(hookedWriter, r)
@@ -48,7 +50,6 @@ func intercept404(handler, on404 http.Handler) http.Handler {
 }
 
 func serveFileContents(file string, files http.FileSystem) http.HandlerFunc {
-	fmt.Println("serveFileContents")
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Restrict only to instances where the browser is looking for an HTML file
 		if !strings.Contains(r.Header.Get("Accept"), "text/html") {
@@ -80,6 +81,9 @@ func serveFileContents(file string, files http.FileSystem) http.HandlerFunc {
 	}
 }
 
+// ------------------------------------------------------------
+// Main Go Routing Logic
+// ------------------------------------------------------------
 func main() {
 	var frontend fs.FS = os.DirFS("./web/build")
 	httpFS := http.FS(frontend)
@@ -91,7 +95,9 @@ func main() {
 	http.HandleFunc("/api/delete", share.HandleDelete)
 	http.HandleFunc("/api/create", share.HandleCreate)
 	http.HandleFunc("/api/download", share.HandleDownload)
+	// Handle any other request by serving the static file
 	http.Handle("/", intercept404(fileServer, serveIndex))
 
+	fmt.Println("Starting server on port 8080")
 	http.ListenAndServe(":8080", nil)
 }
