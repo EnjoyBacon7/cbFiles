@@ -1,5 +1,6 @@
 // System imports
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Local imports
 import CbUpload from '../components/CbUpload';
@@ -9,6 +10,8 @@ import CbShareNav from '../components/CbShareNav';
 
 // Share instance component
 export function CbShare() {
+
+    const navigate = useNavigate();
 
     const shareId = window.location.pathname.split('/')[2];
 
@@ -22,8 +25,25 @@ export function CbShare() {
             }
             return response.json();
         }).then(data => {
-            setFileInfo(data.files)
+            console.log(data);
+            if (data.exists) {
+                setFileInfo(data.files);
+            } else {
+                createShare();
+            }
             
+        }).catch(error => {
+            navigate('/');
+            console.log(error);
+        });
+    }
+
+    function createShare() {
+        fetch(`/api/create?shareId=${shareId}`).then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            loadFiles();
         }).catch(error => {
             console.log(error);
         });
