@@ -1,4 +1,4 @@
-package share
+package handlers
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		shareId := r.URL.Query().Get("shareId")
-		fmt.Println(shareId)
+		fmt.Println(r)
 		shareId, err = url.QueryUnescape(shareId)
 		if err != nil {
 			fmt.Println(err)
