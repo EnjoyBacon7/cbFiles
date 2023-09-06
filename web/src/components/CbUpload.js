@@ -3,9 +3,12 @@ import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useNavigate } from 'react-router-dom';
 
 // Upload component
 export function CbUpload({ loadFiles }) {
+
+    const navigate = useNavigate();
 
     let shareId = useParams().shareId;
 
@@ -62,6 +65,7 @@ export function CbUpload({ loadFiles }) {
             }
             return response.json();
         }).then(data => {
+            navigate('/share/' + data.shareId);
         }).catch(error => {
             console.log(error);
         });
