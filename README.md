@@ -52,4 +52,4 @@ Access the app at `http://localhost:8080` on your browser (on the same machine).
 
 ### Behind the scenes
 
-This project is built with React and using react-bootstrap for UI components. The backend is a simple Go server that stores files in a local directory.
+This project is built with React and uses react-bootstrap for UI components. The backend is a simple Go server that stores files in a local directory.
