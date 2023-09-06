@@ -88,6 +88,22 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(" File uploaded!")
 	}
 
+	// Build response JSON (in case of a created share)
+	responseData := map[string]interface{}{
+		"shareId": shareId,
+	}
+
+	// Marshal response...
+	responseJSON, err := json.Marshal(responseData)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// ...and send it
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(responseJSON)
+
 	fmt.Println("Upload complete!")
 
 }
