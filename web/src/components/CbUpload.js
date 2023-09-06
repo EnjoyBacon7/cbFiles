@@ -13,6 +13,7 @@ export function CbUpload({ loadFiles }) {
     const ref = useRef(null);
 
     const handleDrag = (e) => {
+        e.preventDefault();
         e.stopPropagation();
         if (e.type === 'dragenter' || e.type === 'dragover') {
             setDragActive(true);
@@ -33,7 +34,10 @@ export function CbUpload({ loadFiles }) {
 
     const handleClick = (e) => {
         ref.current.click();
-        handleSubmit(e);
+        if (e.target.files && e.target.files.length > 0) {
+            const files = [...e.target.files];
+            handleUpload(files);
+        }
     }
 
     const handleChange = (e) => {
