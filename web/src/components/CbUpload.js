@@ -57,11 +57,11 @@ export function CbUpload({ loadFiles }) {
             method: 'POST',
             body: data
         }).then(response => {
-            if (response.ok) {
-                loadFiles();
-            } else {
+            if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
+            return response.json();
+        }).then(data => {
         }).catch(error => {
             console.log(error);
         });
