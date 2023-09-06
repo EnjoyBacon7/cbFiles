@@ -255,22 +255,44 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------------------
 // Share creation
 // ------------------------------------------------------------
-func HandleCreate(w http.ResponseWriter, r *http.Request) {
+func createShareDir(w http.ResponseWriter, r *http.Request) string {
 
 	fmt.Println("Share creation request received :")
+	res, err := http.Get("https://random-word-api.herokuapp.com/word?number=2")
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
+	defer res.Body.Close()
 
-	// Obtain shareId and Path from URL
-	shareId := r.URL.Query().Get("shareId")
+	// Decode JSON response
+	var words []string
+	err = json.NewDecoder(res.Body).Decode(&words)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
+
+	// Build shareId from words
+	shareId := words[0] + "-" + words[1]
 	sharePath := path.Join("data", "share", shareId)
+
+	// Check if share already exists
+	if _, err := os.Stat(sharePath); !os.IsNotExist(err) {
+		// If so, return error
+		fmt.Println(" Share already exists")
+		return ""
+	}
 
 	fmt.Println(" Creating share", shareId, "...")
 
 	// Create share
-	err := os.MkdirAll(sharePath, os.ModePerm)
+	err = os.MkdirAll(sharePath, os.ModePerm)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return ""
 	}
 
 	fmt.Println("Share created!")
+	return shareId
 }
