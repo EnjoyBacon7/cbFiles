@@ -93,7 +93,6 @@ func main() {
 	http.HandleFunc("/api/search", handlers.HandleSearch)
 	http.HandleFunc("/api/upload", handlers.HandleUpload)
 	http.HandleFunc("/api/delete", handlers.HandleDelete)
-	http.HandleFunc("/api/create", handlers.HandleCreate)
 	http.HandleFunc("/api/download", handlers.HandleDownload)
 	// Handle any other request by serving the static file
 	http.Handle("/", intercept404(fileServer, serveIndex))
