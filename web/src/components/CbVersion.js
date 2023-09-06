@@ -22,7 +22,7 @@ export function CbVersion() {
         onMouseLeave={handleMouseLeave}>
             <Card.Body>
                 <Card.Text className='text-center'>
-                    Version <a href='http://www.staggeringbeauty.com' style={{textDecoration: 'none'}}>🦄</a>.1.0.0
+                    Version <a href='http://www.staggeringbeauty.com' style={{textDecoration: 'none'}}>🦄</a>.0.1.0
                 </Card.Text>
             </Card.Body>
         </Card>
