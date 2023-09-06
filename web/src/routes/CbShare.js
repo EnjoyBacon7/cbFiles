@@ -29,7 +29,6 @@ export function CbShare() {
             if (data.exists) {
                 setFileInfo(data.files);
             } else {
-                createShare();
                 // Put a warning toast here
                 navigate('/')
             }
