@@ -253,7 +253,7 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 }
 
 // ------------------------------------------------------------
-// Share create handler
+// Share creation
 // ------------------------------------------------------------
 func HandleCreate(w http.ResponseWriter, r *http.Request) {
 
