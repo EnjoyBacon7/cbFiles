@@ -33,6 +33,14 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if shareId == "undefined" {
+		shareId = createShareDir(w, r)
+		if shareId == "" {
+			fmt.Println("Error creating share")
+			return
+		}
+	}
+
 	fmt.Println(" Order for", len(files), "files to", shareId)
 
 	// Text manipulation to obtain path
@@ -57,7 +65,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer file.Close()
-		
+
 		fmt.Println(" Uploading file (", index, ") ...")
 		fmt.Println("  Name:", fileHeader.Filename)
 
