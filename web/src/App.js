@@ -12,6 +12,8 @@ import CbRoot from './routes/CbRoot';
 import ErrorPage from './routes/error-page';
 import CbShare from './routes/CbShare';
 
+import CbVersion from './components/CbVersion';
+
 // Router Initialization
 const router = createBrowserRouter([
   {
@@ -28,17 +30,20 @@ const router = createBrowserRouter([
 // Main App Component
 function App() {
   return (
-    <Container fluid>
-      <Row>
-        <Col xs='1' lg='2'></Col>
-        <Col xs='22' lg='8'>
+    <div className='mb-3'>
+      <Container fluid>
+        <Row>
+          <Col xs='1' lg='2'></Col>
+          <Col xs='22' lg='8'>
 
-          <RouterProvider router={router} />
+            <RouterProvider router={router} />
 
-        </Col>
-        <Col xs='1' lg='2'></Col>
-      </Row>
-    </Container>
+          </Col>
+          <Col xs='1' lg='2'></Col>
+        </Row>
+      </Container>
+      <CbVersion />
+    </div>
   );
 }
 
