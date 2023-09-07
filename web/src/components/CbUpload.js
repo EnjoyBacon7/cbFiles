@@ -65,8 +65,13 @@ export function CbUpload({ loadFiles }) {
             }
             return response.json();
         }).then(data => {
-            navigate('/share/' + data.shareId);
+            if(data.shareId === shareId) {
+                loadFiles();
+            } else {
+                navigate('/share/' + data.shareId);
+            }
         }).catch(error => {
+            console.log("Error during upload. Please check your internet connexion." )
             console.log(error);
         });
     }

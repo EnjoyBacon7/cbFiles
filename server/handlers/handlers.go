@@ -17,6 +17,8 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Upload request received :")
 
+	r.Body = http.MaxBytesReader(w, r.Body, 50*1024*1024) // 50 MB
+
 	// Parse data from request
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
@@ -260,7 +262,8 @@ func createShareDir(w http.ResponseWriter, r *http.Request) string {
 	fmt.Println("Share creation request received :")
 	res, err := http.Get("https://random-word-api.herokuapp.com/word?number=2")
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(" Could not reach random word api :")
+		fmt.Println("  ", err)
 		return ""
 	}
 	defer res.Body.Close()
