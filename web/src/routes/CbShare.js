@@ -39,7 +39,7 @@ export function CbShare() {
         });
     }
 
-    function 
+    
 
     useEffect(() => {
         loadFiles();
