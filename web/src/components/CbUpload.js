@@ -5,8 +5,13 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 
+// Local imports
+import { useNotification } from './CbToastsContext';
+
 // Upload component
 export function CbUpload({ loadFiles }) {
+
+    const { addNotification } = useNotification();
 
     const navigate = useNavigate();
 
@@ -31,6 +36,7 @@ export function CbUpload({ loadFiles }) {
     }
 
     const handleSubmit = (e) => {
+        addNotification('Upload in progress...', 50)
         e.preventDefault();
         e.stopPropagation();
         setDragActive(false);
