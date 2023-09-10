@@ -25,6 +25,10 @@ export function CbUpload({ loadFiles }) {
         }
     }
 
+    const handleClick = (e) => {
+        ref.current.click();
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -35,15 +39,8 @@ export function CbUpload({ loadFiles }) {
         }
     }
 
-    const handleClick = (e) => {
-        ref.current.click();
-        if (e.target.files && e.target.files.length > 0) {
-            const files = [...e.target.files];
-            handleUpload(files);
-        }
-    }
-
     const handleChange = (e) => {
+        console.log(ref)
         e.preventDefault();
         if (e.target.files && e.target.files.length > 0) {
             const files = [...e.target.files];
