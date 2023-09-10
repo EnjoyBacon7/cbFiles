@@ -13,6 +13,8 @@ import ErrorPage from './routes/error-page';
 import CbShare from './routes/CbShare';
 
 import CbVersion from './components/CbVersion';
+import { NotificationProvider } from './components/CbToastsContext';
+import CbToastsContainer from './components/CbToastsContainer';
 
 // Router Initialization
 const router = createBrowserRouter([
@@ -29,20 +31,24 @@ const router = createBrowserRouter([
 
 // Main App Component
 function App() {
+
   return (
     <div className='mb-3'>
-      <Container fluid>
-        <Row>
-          <Col xs='1' lg='2'></Col>
-          <Col xs='22' lg='8'>
+      <NotificationProvider>
+        <Container fluid>
+          <Row>
+            <Col xs='1' lg='2'></Col>
+            <Col xs='22' lg='8'>
 
-            <RouterProvider router={router} />
+              <RouterProvider router={router} />
 
-          </Col>
-          <Col xs='1' lg='2'></Col>
-        </Row>
-      </Container>
-      <CbVersion />
+            </Col>
+            <Col xs='1' lg='2'></Col>
+          </Row>
+        </Container>
+        <CbToastsContainer />
+        <CbVersion />
+      </NotificationProvider>
     </div>
   );
 }
