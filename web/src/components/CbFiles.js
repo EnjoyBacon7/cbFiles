@@ -140,35 +140,37 @@ function handleIconPath(fileName) {
 }
 
 function handleDelete(shareId, fileName, loadFiles) {
-    fetch(`/api/delete?shareId=${shareId}&fileName=${fileName}`).then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
+    var request = new XMLHttpRequest();
+    request.open('DELETE', `/api/delete?shareId=${shareId}&fileName=${fileName}`, true);
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            loadFiles();
+        } else {
+            console.log(`Network response was not ok ${request.status}`);
         }
-        loadFiles();
-    }).catch(error => {
-        console.log(error);
-    });
+    }
+    request.send();
 }
 
 function handleDownload(shareId, fileName) {
-    fetch(`/api/download?shareId=${shareId}&fileName=${fileName}`).then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
+    var request = new XMLHttpRequest();
+    request.open('GET', `/api/download?shareId=${shareId}&fileName=${fileName}`, true);
+    request.responseType = 'blob';
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            const blob = request.response;
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            downloadElement.href = blobUrl;
+            downloadElement.download = fileName;
+            downloadElement.click();
+
+            window.URL.revokeObjectURL(blobUrl);
+        } else {
+            console.log(`Network response was not ok ${request.status}`);
         }
-        return response.blob();
-    }).then(blob => {
-
-        const blobUrl = window.URL.createObjectURL(blob);
-
-        downloadElement.href = blobUrl;
-        downloadElement.download = fileName;
-        downloadElement.click();
-
-        window.URL.revokeObjectURL(blobUrl);
-
-    }).catch(error => {
-        console.log(error);
-    });
+    }
+    request.send();
 }
 
 function DownloadSVG() {

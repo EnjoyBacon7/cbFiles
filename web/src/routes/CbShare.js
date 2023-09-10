@@ -20,26 +20,24 @@ export function CbShare() {
     const [fileInfo, setFileInfo] = useState([]);
 
     function loadFiles() {
-        fetch(`/api/search?shareId=${shareId}`).then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        }).then(data => {
-            console.log(data);
-            if (data.exists) {
-                setFileInfo(data.files);
+        var request = new XMLHttpRequest();
+        request.open('GET', `/api/search?shareId=${shareId}`, true);
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                var data = JSON.parse(this.response);
+                if (data.exists) {
+                    setFileInfo(data.files);
+                } else {
+                    // Put a warning toast here
+                    navigate('/')
+                }
             } else {
                 // Put a warning toast here
                 navigate('/')
             }
-            
-        }).catch(error => {
-            console.log(error);
-        });
+        }
+        request.send();
     }
-
-    
 
     useEffect(() => {
         loadFiles();

@@ -53,29 +53,27 @@ export function CbUpload({ loadFiles }) {
         for (let i = 0; i < files.length; i++) {
             data.append('files', files[i]);
         }
-        fetch('/api/upload?shareId=' + encodeURIComponent(shareId), {
-            method: 'POST',
-            body: data
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        }).then(data => {
-            if(data.shareId === shareId) {
-                loadFiles();
+        var request = new XMLHttpRequest();
+        request.open('POST', `/api/upload?shareId=${encodeURIComponent(shareId)}`, true);
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                var responseText = JSON.parse(this.response);
+                if (responseText.shareId === shareId) {
+                    loadFiles();
+                } else {
+                    // Put a warning toast here
+                    navigate('/')
+                }
             } else {
-                navigate('/share/' + data.shareId);
+                console.log(`Error during upload. Please check your internet connexion and upload file size (< 50MB) ${request.status}`);
             }
-        }).catch(error => {
-            console.log("Error during upload. Please check your internet connexion." )
-            console.log(error);
-        });
+        }
+        request.send(data);
     }
 
     return (
         <div className='d-flex flex-column mt-3 test-primary'>
-            <Form className='d-flex flex-column' onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleSubmit} onSubmit={(e) => e.preventDefault()}>
+            <Form className='d-flex flex-column' onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleSubmit} onSubmit={(e) => {e.preventDefault()}}>
                 <input ref={ref} type='file' className='d-none' onChange={handleChange} multiple />
                 <Button id='uploadDiv' variant={`${dragActive ? 'secondary' : 'outline-secondary'} p-5`} onClick={handleClick}>
                     Drag and drop files here
