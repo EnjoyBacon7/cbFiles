@@ -26,6 +26,7 @@ export function CbUpload({ loadFiles }) {
     }
 
     const handleClick = (e) => {
+        ref.current.value = null;
         ref.current.click();
     }
 
