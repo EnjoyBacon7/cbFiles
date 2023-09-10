@@ -7,7 +7,6 @@ import CbUpload from '../components/CbUpload';
 import CbFiles from '../components/CbFiles';
 import CbHeader from '../components/CbHeader';
 import CbShareNav from '../components/CbShareNav';
-import CbToasts from '../components/CbToast';
 
 // Share instance component
 export function CbShare() {
@@ -50,7 +49,6 @@ export function CbShare() {
             <CbUpload loadFiles={loadFiles} />
             <CbShareNav changeViewMode={setViewMode} viewMode={viewMode} />
             <CbFiles fileInfo={fileInfo} viewMode={viewMode} loadFiles={loadFiles} />
-            <CbToasts  />
         </div>
     );
 }
