@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"os"
 	"path"
 )
@@ -15,98 +14,63 @@ import (
 // ------------------------------------------------------------
 func HandleUpload(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("Upload request received :")
+	fmt.Println("Chunk upload request received :")
 
-	r.Body = http.MaxBytesReader(w, r.Body, 50*1024*1024) // 50 MB
-
-	// Parse data from request
-	err := r.ParseMultipartForm(10 << 20)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	files := r.MultipartForm.File["files"]
-
-	// Obtain shareId from URL
+	// Obtain shareId and Path from URL
 	shareId := r.URL.Query().Get("shareId")
-	shareId, err = url.QueryUnescape(shareId)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	if shareId == "undefined" {
+	if (shareId == "") {
 		shareId = createShareDir(w, r)
-		if shareId == "" {
-			fmt.Println("Error creating share")
+		if (shareId == "") {
+			fmt.Println(" Created share has no name (Error in share creation")
 			return
+		} else {
+			fmt.Println(" New share created with id", shareId)
 		}
 	}
-
-	fmt.Println(" Order for", len(files), "files to", shareId)
-
-	// Text manipulation to obtain path
+	
 	sharePath := path.Join("data", "share", shareId)
-
-	// Check if share does not exist
 	if _, err := os.Stat(sharePath); os.IsNotExist(err) {
-		// If so, create the corresponding directory
-		err := os.MkdirAll(sharePath, os.ModePerm)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-	}
-
-	// Iterate through files Upload
-	for index, fileHeader := range files {
-		// Open file
-		file, err := fileHeader.Open()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer file.Close()
-
-		fmt.Println(" Uploading file (", index, ") ...")
-		fmt.Println("  Name:", fileHeader.Filename)
-
-		// Create file at path location
-		out, err := os.Create(path.Join(sharePath, fileHeader.Filename))
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		defer out.Close()
-
-		// Copy file data into file
-		_, err = io.Copy(out, file)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// Confirm file upload
-		fmt.Println(" File uploaded!")
-	}
-
-	// Build response JSON (in case of a created share)
-	responseData := map[string]interface{}{
-		"shareId": shareId,
-	}
-
-	// Marshal response...
-	responseJSON, err := json.Marshal(responseData)
-	if err != nil {
-		fmt.Println(err)
+		fmt.Println(" The share does not exist, creation is done from Home page. Canceling upload")
 		return
 	}
 
-	// ...and send it
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(responseJSON)
+	err := r.ParseMultipartForm(1024 * 1024) // Limiting chunk size to 1MB
+	if err != nil {
+		fmt.Println(" Error parsing multipart form :")
+		fmt.Println("  ", err)
+		return
+	}
 
-	fmt.Println("Upload complete!")
+	// Retrieve chunk file and file Name
+	fileName := r.FormValue("fileName")
+	fileChunk, _, err := r.FormFile("fileChunk")
+	if err != nil {
+		fmt.Println(" Error retrieving chunk file :")
+		fmt.Println("  ", err)
+		return
+	}
+	defer fileChunk.Close()
+
+	tempFilePath := path.Join(sharePath, fileName)
+	tempFile, err := os.OpenFile(tempFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println(" Error opening or creating temp file :")
+		fmt.Println("  ", err)
+		return
+	}
+	defer tempFile.Close()
+
+	_, err = io.Copy(tempFile, fileChunk)
+	if err != nil {
+		fmt.Println(" Error copying chunk file to temp file :")
+		fmt.Println("  ", err)
+		return
+	}
+
+	
+
+	fmt.Println("Chunk uploaded!")
+
 
 }
 

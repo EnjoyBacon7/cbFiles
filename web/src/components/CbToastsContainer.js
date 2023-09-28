@@ -41,8 +41,6 @@ export default CbToastsContainer;
 
 function toastAge(notification) {
 
-    console.log(notification.progress)
-
     const ageSeconds = Math.floor((Date.now() - notification.id) / 1000);
     const ageMinutes = Math.floor(ageSeconds / 60);
 
