@@ -21,11 +21,13 @@ export function CbRoot() {
         navigate(`/share/${encodeURIComponent(shareId)}`);
     }
 
+    function loadFilesPlaceHolder() {}
+
 
     return (
         <div>
             <CbHeader />
-            <CbUpload />
+            <CbUpload loadFiles={loadFilesPlaceHolder}/>
             <Form className="mt-3" onChange={handleChange} onSubmit={handleRedirect}>
                 <Form.Group>
                     <Form.Control type="text" placeholder="Enter Share ID to Retrieve an Existing Share" />

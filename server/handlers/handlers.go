@@ -18,16 +18,8 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 
 	// Obtain shareId and Path from URL
 	shareId := r.URL.Query().Get("shareId")
-	if (shareId == "") {
-		shareId = createShareDir(w, r)
-		if (shareId == "") {
-			fmt.Println(" Created share has no name (Error in share creation")
-			return
-		} else {
-			fmt.Println(" New share created with id", shareId)
-		}
-	}
 	
+	// Check if share exists
 	sharePath := path.Join("data", "share", shareId)
 	if _, err := os.Stat(sharePath); os.IsNotExist(err) {
 		fmt.Println(" The share does not exist, creation is done from Home page. Canceling upload")
@@ -221,14 +213,14 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 // ------------------------------------------------------------
 // Share creation
 // ------------------------------------------------------------
-func createShareDir(w http.ResponseWriter, r *http.Request) string {
+func HandleCreate(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Share creation request received :")
 	res, err := http.Get("https://random-word-api.herokuapp.com/word?number=2")
 	if err != nil {
 		fmt.Println(" Could not reach random word api :")
 		fmt.Println("  ", err)
-		return ""
+		return
 	}
 	defer res.Body.Close()
 
@@ -237,7 +229,7 @@ func createShareDir(w http.ResponseWriter, r *http.Request) string {
 	err = json.NewDecoder(res.Body).Decode(&words)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return
 	}
 
 	// Build shareId from words
@@ -248,7 +240,7 @@ func createShareDir(w http.ResponseWriter, r *http.Request) string {
 	if _, err := os.Stat(sharePath); !os.IsNotExist(err) {
 		// If so, return error
 		fmt.Println(" Share already exists")
-		return ""
+		return
 	}
 
 	fmt.Println(" Creating share", shareId, "...")
@@ -257,9 +249,24 @@ func createShareDir(w http.ResponseWriter, r *http.Request) string {
 	err = os.MkdirAll(sharePath, os.ModePerm)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return
 	}
 
+	// Create respone JSON
+	responseData := map[string]interface{}{
+		"shareId": shareId,
+	}
+
+	// Marshal response...
+	responseJSON, err := json.Marshal(responseData)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// ...and send it
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(responseJSON)
+
 	fmt.Println("Share created!")
-	return shareId
 }

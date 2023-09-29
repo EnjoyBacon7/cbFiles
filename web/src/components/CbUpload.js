@@ -99,6 +99,7 @@ export function CbUpload({ loadFiles }) {
     }
 
     const handleUpload = (files) => {
+
         const uploadNextFile = () => {
             if (files.length > 0) {
                 let start = 0;
@@ -111,8 +112,26 @@ export function CbUpload({ loadFiles }) {
             }
         };
 
-        // Start uploading the first file
-        uploadNextFile();
+        if(shareId === undefined) {
+            // Send a request to create a new share
+            var request = new XMLHttpRequest();
+            request.open('POST', `/api/create`, true);
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 400) {
+                    var data = JSON.parse(this.response);
+                    shareId = data.shareId;
+                    navigate(`/share/${shareId}`);
+                    uploadNextFile();
+                } else {
+                    // Put a warning toast here
+                    navigate('/')
+                }
+            }
+            request.send();
+        } else {
+            // Start uploading the first file
+            uploadNextFile();
+        }
     };
 
     return (
