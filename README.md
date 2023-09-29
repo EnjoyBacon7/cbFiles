@@ -7,11 +7,11 @@ This is a very early version of the project, and security has not taken the prio
 
 ## The Project
 
-Drag and drop your files on the drop zone to create a new Share. You can then share the link or share name with whomever you like. You can also search for an existing share by name (or create a new one if it doesn't exist).
+Drag and drop your files on the drop zone to create a new Share. You can then share the link or share name with whomever you like. You can also search for an existing share by name ~~(or create an existing one if it doesn't exist)~~.
 
-The name of a share is not yet editable and is randomly generated.
+The name of a share is not yet editable and is randomly generated using a random word api.
 
-Once on a share's page you can choose to download the files individually or as a zip archive. You can also delete either individual files or the whole share. Of course you may also search for a specific file by name.
+Once on a share's page you can choose to download the files individually ~~or as a zip archive~~. You can also delete either individual files ~~or the whole share. Of course you may also search for a specific file by name.~~
 
 ![PjScreenshot](./example/screenshot.png)
 
