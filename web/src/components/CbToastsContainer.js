@@ -20,7 +20,7 @@ function CbToastsContainer() {
     return (
         <ToastContainer className="p-3" position='bottom-end'>
             {notifications.map((notification) => (
-                <Toast onClick={() => { removeNotification(notification.id) }}>
+                <Toast onClose={() => { removeNotification(notification.id) }}>
                     <Toast.Header>
                         <strong className="me-auto">Upload in progress...</strong>
                         <small>
