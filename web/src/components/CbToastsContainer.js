@@ -29,7 +29,7 @@ function CbToastsContainer() {
 
                     </Toast.Header>
                     <Toast.Body>
-                        <ProgressBar animated now={notification.progress} />
+                        <ProgressBar animated={notification.progress !== 100} variant={notification.progress !== 100 ? "info" : "success"} now={notification.progress} />
                     </Toast.Body>
                 </Toast>
             ))}
