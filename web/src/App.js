@@ -5,12 +5,12 @@ import Col from 'react-bootstrap/Col';
 import {
   createBrowserRouter,
   RouterProvider,
+  useNavigate,
 } from "react-router-dom";
 
 // Local imports
 import CbRoot from './routes/CbRoot';
 import ErrorPage from './routes/error-page';
-import CbShare from './routes/CbShare';
 
 import CbVersion from './components/CbVersion';
 import { NotificationProvider } from './components/CbToastsContext';
@@ -20,12 +20,12 @@ import CbToastsContainer from './components/CbToastsContainer';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <CbRoot />,
+    element: <CbRoot isHome={true} />,
     errorElement: <ErrorPage />,
   },
   {
     path: "/share/:shareId",
-    element: <CbShare />,
+    element: <CbRoot isHome={false} />,
   }
 ]);
 
