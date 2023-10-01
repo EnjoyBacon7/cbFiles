@@ -20,16 +20,16 @@ function CbToastsContainer() {
     return (
         <ToastContainer className="p-3" position='bottom-end'>
             {notifications.map((notification) => (
-                <Toast onClick={() => { removeNotification(notification.id) }}>
+                <Toast onClose={() => { removeNotification(notification.id) }}>
                     <Toast.Header>
-                        <strong className="me-auto">Upload in progress...</strong>
+                        <strong className="me-auto">{notification.header}</strong>
                         <small>
                             {toastAge(notification)}
                         </small>
 
                     </Toast.Header>
                     <Toast.Body>
-                        <ProgressBar animated now={notification.progress} />
+                        <ProgressBar animated={notification.progress !== 100} variant={notification.progress !== 100 ? "info" : "success"} now={notification.progress} />
                     </Toast.Body>
                 </Toast>
             ))}
@@ -41,7 +41,7 @@ export default CbToastsContainer;
 
 function toastAge(notification) {
 
-    const ageSeconds = Math.floor((Date.now() - notification.id) / 1000);
+    const ageSeconds = Math.floor((Date.now() - notification.age) / 1000);
     const ageMinutes = Math.floor(ageSeconds / 60);
 
     if (ageSeconds < 60) {
