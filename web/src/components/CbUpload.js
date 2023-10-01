@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 // Local imports
 import { useNotification } from './CbToastsContext';
@@ -66,7 +67,7 @@ export function CbUpload({ loadFiles }) {
     let start = 0;
     let end = 0;
 
-    const uploadFile = (file, start, end, callback) => {
+    const uploadFile = (file, start, end, callback, uploadId) => {
 
         // Ceate form data using chunk info and shareId
         const chunk = file.slice(start, end);
@@ -81,11 +82,11 @@ export function CbUpload({ loadFiles }) {
         request.open('POST', `/api/upload?shareId=${encodeURIComponent(shareId)}`, true);
         request.onreadystatechange = function () {
             if (request.status >= 200 && request.status < 400) {
-                addNotification('Uploading ' + file.name, start / file.size * 100);
+                addNotification(uploadId, 1, start / file.size * 100);
                 start = end;
                 end = Math.min(end + chunkSize, file.size);
                 if (start != end && !lastChunkSent) {
-                    uploadFile(file, start, end, callback)
+                    uploadFile(file, start, end, callback, uploadId)
                 }
                 if (start == end && !lastChunkSent) {
                     callback();
@@ -100,6 +101,8 @@ export function CbUpload({ loadFiles }) {
 
     const handleUpload = (files) => {
 
+        let uploadId = uuidv4();
+
         const uploadNextFile = () => {
             if (files.length > 0) {
                 let start = 0;
@@ -108,7 +111,7 @@ export function CbUpload({ loadFiles }) {
                 uploadFile(files.pop(), start, end, () => {
                     loadFiles(); // Load files after each file is uploaded
                     uploadNextFile(); // Upload the next file
-                });
+                }, uploadId);
             }
         };
 
