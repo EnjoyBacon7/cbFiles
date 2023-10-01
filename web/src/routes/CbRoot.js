@@ -15,8 +15,6 @@ export function CbRoot( { isHome } ) {
 
     // Useful hooks
     const [shareId, setShareId] = useState(useParams().shareId);
-    console.log(shareId)
-    console.log(isHome)
     const navigate = useNavigate();
     // Hooks if in share
     const [viewMode, setViewMode] = useState("list");
@@ -34,7 +32,6 @@ export function CbRoot( { isHome } ) {
 
     function loadFiles() {
         const shareId_forLoad = window.location.pathname.split('/')[2]; // Use useRef instead?
-        console.log("loadFiles")
         var request = new XMLHttpRequest();
         request.open('GET', `/api/search?shareId=${shareId_forLoad}`, true);
         request.onload = function () {
@@ -59,7 +56,6 @@ export function CbRoot( { isHome } ) {
             setFileInfo([]);
             loadFiles();
         }
-        console.log("useEffect")
     }, [isHome]);
 
     return (
