@@ -22,7 +22,7 @@ function CbToastsContainer() {
             {notifications.map((notification) => (
                 <Toast onClose={() => { removeNotification(notification.id) }}>
                     <Toast.Header>
-                        <strong className="me-auto">Upload in progress...</strong>
+                        <strong className="me-auto">{notification.header}</strong>
                         <small>
                             {toastAge(notification)}
                         </small>
