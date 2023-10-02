@@ -141,7 +141,7 @@ function handleIconPath(fileName) {
 
 function handleDelete(shareId, fileName, loadFiles) {
     var request = new XMLHttpRequest();
-    request.open('DELETE', `/api/delete?shareId=${shareId}&fileName=${fileName}`, true);
+    request.open('DELETE', `/api/delete?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`, true);
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {
             loadFiles();
@@ -154,7 +154,7 @@ function handleDelete(shareId, fileName, loadFiles) {
 
 function handleDownload(shareId, fileName) {
     var request = new XMLHttpRequest();
-    request.open('GET', `/api/download?shareId=${shareId}&fileName=${fileName}`, true);
+    request.open('GET', `/api/download?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`, true);
     request.responseType = 'blob';
     request.onload = function () {
         if (request.status >= 200 && request.status < 400) {

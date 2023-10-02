@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"io/fs"
 	"net/http"
-	"os"
 	"strings"
 
+	// Importing web package
+	"github.com/EnjoyBacon7/cbFiles/web"
 	// Importing handlers package
 	"github.com/EnjoyBacon7/cbFiles/server/handlers"
 )
@@ -84,8 +85,9 @@ func serveFileContents(file string, files http.FileSystem) http.HandlerFunc {
 // ------------------------------------------------------------
 // Main Go Routing Logic
 // ------------------------------------------------------------
+
 func main() {
-	var frontend fs.FS = os.DirFS("./web/build")
+	var frontend fs.FS = web.GetUiFs()
 	httpFS := http.FS(frontend)
 	fileServer := http.FileServer(httpFS)
 	serveIndex := serveFileContents("index.html", httpFS)
