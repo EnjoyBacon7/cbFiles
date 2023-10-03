@@ -9,12 +9,20 @@ export function CbHeader(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const theme = localStorage.getItem("theme");
-        theme && setTheme(theme);
+        const darkTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        if (darkTheme.matches) {
+            setTheme("dark");
+        } else {
+            setTheme("light");
+        }
     }, []);
 
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        const newColorScheme = e.matches ? "dark" : "light";
+        setTheme(newColorScheme);
+    });
+
     useEffect(() => {
-        localStorage.setItem("theme", theme);
         document.documentElement.setAttribute("data-bs-theme", theme);
     }, [theme]);
 
