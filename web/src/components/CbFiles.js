@@ -14,13 +14,20 @@ import InputGroup from 'react-bootstrap/InputGroup';
 // ------------------------------------------------------------------
 // Files card parent component
 // ------------------------------------------------------------------
-export function CbFiles({ fileInfo, viewMode, loadFiles }) {
+export function CbFiles({ fileInfo, viewMode, loadFiles, searchTerms }) {
 
     const [components, setComponents] = useState([]);
 
     useEffect(() => {
+        var filteredfileInfo = fileInfo;
+        if (searchTerms) {
+            filteredfileInfo = fileInfo.filter((item) => {
+                return item.toLowerCase().includes(searchTerms.toLowerCase());
+            });
+        }
+
         if (viewMode === "gallery") {
-            const newComponents = fileInfo.map((item) => (
+            const newComponents = filteredfileInfo.map((item) => (
                 <CbFileGallery fileName={item} loadFiles={loadFiles} />
             ));
 
@@ -30,7 +37,7 @@ export function CbFiles({ fileInfo, viewMode, loadFiles }) {
                 </Row>
             );
         } else if (viewMode === "list") {
-            const newComponents = fileInfo.map((item) => (
+            const newComponents = filteredfileInfo.map((item) => (
                 <CbFileList fileName={item} loadFiles={loadFiles} />
             ));
             setComponents(

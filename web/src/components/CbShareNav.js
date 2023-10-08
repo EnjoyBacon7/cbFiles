@@ -2,12 +2,22 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-export function CbShareNav({ changeViewMode, viewMode }) {
+export function CbShareNav({ changeViewMode, viewMode, setSearchTerms }) {
+
+    function handleChange(e) {
+        setSearchTerms(e.target.value)
+    }
+
+    function handleSubmit() {
+        console.log('submitting');
+    }
 
     return (
         <div>
             <InputGroup className="mt-3">
                 <FormControl
+                    onChange={handleChange}
+                    onSubmit={handleSubmit}
                     placeholder='Search Here'
                     aria-label="file search field"
                 />

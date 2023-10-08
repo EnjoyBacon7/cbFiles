@@ -21,6 +21,7 @@ export function CbRoot({ isHome }) {
     // Hooks if in share
     const [viewMode, setViewMode] = useState("list");
     const [fileInfo, setFileInfo] = useState([]);
+    const [searchTerms, setSearchTerms] = useState(null);
 
     function loadFiles() {
         const shareId_forLoad = window.location.pathname.split('/')[2]; // Use useRef instead?
@@ -58,8 +59,8 @@ export function CbRoot({ isHome }) {
                 <CbShareSearch />
                 :
                 <div>
-                    <CbShareNav changeViewMode={setViewMode} viewMode={viewMode} />
-                    <CbFiles fileInfo={fileInfo} viewMode={viewMode} loadFiles={loadFiles} />
+                    <CbShareNav changeViewMode={setViewMode} viewMode={viewMode} setSearchTerms={setSearchTerms}/>
+                    <CbFiles fileInfo={fileInfo} viewMode={viewMode} loadFiles={loadFiles} searchTerms={searchTerms} />
                 </div>
             }
         </div>
