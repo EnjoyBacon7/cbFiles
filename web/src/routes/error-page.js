@@ -1,3 +1,7 @@
+// --------------------------------------------------------------
+// Error page displayed when a route fails to load
+// --------------------------------------------------------------
+
 import { useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
