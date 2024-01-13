@@ -49,6 +49,11 @@ jobs:
       with:
         go-version: '1.21'
 
+    - name: Download client build artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: build-npm
+
     - name: Build
       run: |
         GOOS=linux GOARCH=arm64 go build -v -o cbFiles_linux_arm64 server/main.go
