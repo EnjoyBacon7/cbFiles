@@ -39,7 +39,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: client-build
-        path: ./build
+        path: ./web/build
 
   # Building go code
   build-go:
