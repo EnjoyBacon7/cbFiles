@@ -11,12 +11,15 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import isSupported from '../supportedFileTypes';
 import InputGroup from 'react-bootstrap/InputGroup';
 
+import { useNotification } from './CbToastsContext';
+
 // ------------------------------------------------------------------
 // Files card parent component
 // ------------------------------------------------------------------
 export function CbFiles({ fileInfo, viewMode, loadFiles, searchTerms }) {
 
     const [components, setComponents] = useState([]);
+    const { addNotification } = useNotification();
 
     useEffect(() => {
         var filteredfileInfo = fileInfo;
@@ -153,32 +156,32 @@ function handleDelete(shareId, fileName, loadFiles) {
         if (request.status >= 200 && request.status < 400) {
             loadFiles();
         } else {
-            console.log(`Network response was not ok ${request.status}`);
+            console.log(`Network response was not ok: ${request.status}`);
         }
     }
     request.send();
 }
 
 function handleDownload(shareId, fileName) {
-    var request = new XMLHttpRequest();
-    request.open('GET', `/api/download?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`, true);
-    request.responseType = 'blob';
-    request.onload = function () {
-        if (request.status >= 200 && request.status < 400) {
-            const blob = request.response;
-            const blobUrl = window.URL.createObjectURL(blob);
+    const downloadUrl = `/api/download?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`;
 
-            downloadElement.href = blobUrl;
-            downloadElement.download = fileName;
-            downloadElement.click();
+    // Create an anchor element
+    const downloadElement = document.createElement('a');
 
-            window.URL.revokeObjectURL(blobUrl);
-        } else {
-            console.log(`Network response was not ok ${request.status}`);
-        }
-    }
-    request.send();
+    // Set its attributes
+    downloadElement.href = downloadUrl;
+    downloadElement.download = fileName;
+
+    // Append the anchor to the document body
+    document.body.appendChild(downloadElement);
+
+    // Trigger a click event on the anchor
+    downloadElement.click();
+
+    // Remove the anchor from the document
+    document.body.removeChild(downloadElement);
 }
+
 
 function DownloadSVG() {
     return (
