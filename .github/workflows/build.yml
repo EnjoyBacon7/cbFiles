@@ -38,8 +38,8 @@ jobs:
     - name: Archive client build artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: client-build
-        path: ./web/build
+        name: build
+        path: ./web
 
   # Building go code
   build-go:
@@ -58,7 +58,7 @@ jobs:
     - name: Download client build artifacts
       uses: actions/download-artifact@v2
       with:
-        name: client-build
+        name: build
 
     - name: Build
       run: |
