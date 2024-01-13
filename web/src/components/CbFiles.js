@@ -48,7 +48,7 @@ export function CbFiles({ fileInfo, viewMode, loadFiles, searchTerms }) {
             );
         }
 
-    }, [fileInfo, viewMode, loadFiles]);
+    }, [fileInfo, viewMode, loadFiles, searchTerms]);
 
     return (
         <div>
