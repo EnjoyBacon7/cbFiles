@@ -64,9 +64,6 @@ export function CbUpload({ loadFiles }) {
     // Set chunk size limit: 1MB
     const chunkSize = 1024 * 1024;
 
-    let start = 0;
-    let end = 0;
-
     const uploadFile = (file, start, end, callback, uploadId) => {
 
         // Ceate form data using chunk info and shareId
@@ -85,10 +82,10 @@ export function CbUpload({ loadFiles }) {
                 addNotification(uploadId, 1, start / file.size * 100);
                 start = end;
                 end = Math.min(end + chunkSize, file.size);
-                if (start != end && !lastChunkSent) {
+                if (start !== end && !lastChunkSent) {
                     uploadFile(file, start, end, callback, uploadId)
                 }
-                if (start == end && !lastChunkSent) {
+                if (start === end && !lastChunkSent) {
                     callback();
                 }
                 lastChunkSent = true

@@ -11,7 +11,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import isSupported from '../supportedFileTypes';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-import { useNotification } from './CbToastsContext';
 
 // ------------------------------------------------------------------
 // Files card parent component
@@ -19,7 +18,6 @@ import { useNotification } from './CbToastsContext';
 export function CbFiles({ fileInfo, viewMode, loadFiles, searchTerms }) {
 
     const [components, setComponents] = useState([]);
-    const { addNotification } = useNotification();
 
     useEffect(() => {
         var filteredfileInfo = fileInfo;
@@ -131,8 +129,6 @@ function CbFileGallery(props) {
 // General File functions
 // ------------------------------------------------------------------
 
-const downloadElement = document.createElement('a');
-const shareId = window.location.pathname.split('/')[2];
 var fileType;
 
 function handleIconPath(fileName) {
