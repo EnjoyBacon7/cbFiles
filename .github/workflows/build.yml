@@ -35,6 +35,12 @@ jobs:
     # To be implemented once tests are added
     #- run: npm test --passWithNoTests
 
+    - name: Archive client build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: client-build
+        path: ./build
+
   # Building go code
   build-go:
 
@@ -52,7 +58,7 @@ jobs:
     - name: Download client build artifacts
       uses: actions/download-artifact@v2
       with:
-        name: build-npm
+        name: client-build
 
     - name: Build
       run: |
