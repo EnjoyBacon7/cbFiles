@@ -4,7 +4,7 @@
 
 // System imports
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Local imports
 import CbUpload from "../components/CbUpload";
@@ -49,7 +49,9 @@ export function CbRoot({ isHome }) {
             setFileInfo([]);
             loadFiles();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isHome]);
+    
 
     return (
         <div>
