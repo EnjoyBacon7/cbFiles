@@ -5,6 +5,7 @@ name: Build
 
 on:
   push:
+    tags: '*'
     branches: [ "release" ]
 
 jobs:
@@ -40,7 +41,6 @@ jobs:
       with:
         name: build
         path: ./web/build
-    - run: cd ./web
     - run: ls
 
   # Building go code
@@ -61,17 +61,41 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: build
+        path: ./web/build
 
     - name: Build
       run: |
-        GOOS=linux GOARCH=arm64 go build -v -o cbFiles_linux_arm64 server/main.go
-        GOOS=linux GOARCH=amd64 go build -v -o cbFiles_linux_x64 server/main.go
-        GOOS=darwin GOARCH=arm64 go build -v -o cbFiles_macOS_arm64 server/main.go
-        GOOS=darwin GOARCH=amd64 go build -v -o cbFiles_macOS_x64 server/main.go
-        GOOS=windows GOARCH=amd64 go build -v -o cbFiles_windows_arm64 server/main.go
-        GOOS=windows GOARCH=arm go build -v -o cbFiles_windows_x64 server/main.go
-        
+        mkdir cmd
+        GOOS=linux GOARCH=arm64 go build -v -o cmd/cbFiles_linux_arm64 server/main.go
+        GOOS=linux GOARCH=amd64 go build -v -o cmd/cbFiles_linux_x64 server/main.go
+        GOOS=darwin GOARCH=arm64 go build -v -o cmd/cbFiles_macOS_arm64 server/main.go
+        GOOS=darwin GOARCH=amd64 go build -v -o cmd/cbFiles_macOS_x64 server/main.go
+        GOOS=windows GOARCH=amd64 go build -v -o cmd/cbFiles_windows_arm64 server/main.go
+        GOOS=windows GOARCH=arm go build -v -o cmd/cbFiles_windows_x64 server/main.go
 
-    - name: Test
-      run: go test -v server main.go
+    # To implement once tests are in
+    #- name: Test
+    #  run: go test -v server main.go
+
+    - name: Archive cmds
+      uses: actions/upload-artifact@v2
+      with:
+        name: cmd
+        path: ./cmd
+    - run: ls
+    
+
+  release:
+
+    needs: build-go
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    
+    - uses: actions/checkout@v3
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "cmd/*"
+        bodyFile: "body.txt"
 
