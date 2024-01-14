@@ -97,7 +97,6 @@ jobs:
       with:
         name: cmd
         path: ./
-    - run: cd cmd
     - run: ls
 
     - uses: actions/checkout@v3
