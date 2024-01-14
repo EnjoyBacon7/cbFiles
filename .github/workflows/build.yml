@@ -39,7 +39,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: build
-        path: ./web
+        path: ./web/build
 
   # Building go code
   build-go:
@@ -59,6 +59,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: build
+        path: ./web
 
     - name: Build
       run: |
