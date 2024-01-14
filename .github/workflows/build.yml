@@ -98,6 +98,10 @@ jobs:
         name: cmd
         path: ./
     - run: ls
+    - run: cd ../
+    - run: ls
+    - run: cd ../
+    - run: ls
 
     - uses: actions/checkout@v3
     - uses: ncipollo/release-action@v1
