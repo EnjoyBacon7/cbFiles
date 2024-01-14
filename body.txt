@@ -1,2 +1,2 @@
-- Added browser download support
-- Added automated release builds
+- Fixed download browser integration
+- Added automatic executable builds

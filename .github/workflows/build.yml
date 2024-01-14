@@ -92,6 +92,12 @@ jobs:
     permissions:
       contents: write
     steps:
+
+    - name: Download cmds
+      uses: actions/download-artifact@v2
+      with:
+        name: build
+        path: ./cmd
     
    - name: Download cmds
       uses: actions/download-artifact@v2
