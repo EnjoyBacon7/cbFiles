@@ -92,20 +92,17 @@ jobs:
       contents: write
     steps:
 
+    - run: ls
+
     - name: Download cmds
       uses: actions/download-artifact@v2
       with:
         name: cmd
-        path: ./
-    - run: ls
-    - run: cd ../
-    - run: ls
-    - run: cd ../
-    - run: ls
+        path: ./cmd
 
     - uses: actions/checkout@v3
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "./*"
+        artifacts: "./cmd*"
         bodyFile: "body.txt"
 
