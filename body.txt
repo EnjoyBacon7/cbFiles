@@ -1,0 +1,2 @@
+- Fixed download browser integration
+- Added automatic executable builds
