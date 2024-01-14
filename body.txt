@@ -1,2 +1,2 @@
 - Fixed download browser integration
-- Added automatic executable builds
+- Added automatic executable builds for windows, macOS, and linux
