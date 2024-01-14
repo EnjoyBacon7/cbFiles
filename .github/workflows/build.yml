@@ -97,4 +97,5 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "cmd/*"
+        bodyFile: "body.txt"
 
