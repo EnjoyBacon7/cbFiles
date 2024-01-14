@@ -5,12 +5,11 @@ name: Build
 
 on:
   push:
-    tags: '*'
     branches: [ "release" ]
 
 jobs:
 
-  # Builfing react
+  # Building react
   build-npm:
   
     runs-on: ubuntu-latest
