@@ -40,6 +40,8 @@ jobs:
       with:
         name: build
         path: ./web/build
+    - run: cd ./web
+    - run: ls
 
   # Building go code
   build-go:
