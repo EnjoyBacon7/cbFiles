@@ -91,20 +91,18 @@ jobs:
     permissions:
       contents: write
     steps:
+    - uses: actions/checkout@v3
 
-    - run: ls
 
     - name: Download cmds
       uses: actions/download-artifact@v2
       with:
         name: cmd
         path: ./cmd
-    
     - run: ls
 
-    - uses: actions/checkout@v3
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "./cmd/cmd/*"
+        artifacts: "./cmd/*"
         bodyFile: "body.txt"
 
