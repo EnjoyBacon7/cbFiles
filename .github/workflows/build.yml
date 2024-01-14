@@ -71,7 +71,7 @@ jobs:
         GOOS=windows GOARCH=amd64 go build -v -o cbFiles_windows_arm64 server/main.go
         GOOS=windows GOARCH=arm go build -v -o cbFiles_windows_x64 server/main.go
         
-
-    - name: Test
-      run: go test -v server main.go
+    # To implement once tests are in
+    #- name: Test
+    #  run: go test -v server main.go
 
