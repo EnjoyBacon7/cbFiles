@@ -39,8 +39,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: build
-        path: ./web/build
-    - run: cd ./web
+        path: ./build
     - run: ls
 
   # Building go code
