@@ -97,11 +97,12 @@ jobs:
       with:
         name: cmd
         path: ./cmd
+    - run: cd cmd
     - run: ls
 
     - uses: actions/checkout@v3
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "cmd/*"
+        artifacts: "./cmd/*"
         bodyFile: "body.txt"
 
