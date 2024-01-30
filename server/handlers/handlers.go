@@ -9,16 +9,13 @@ import (
 	"path"
 )
 
-// ------------------------------------------------------------
-// Upload handler
-// ------------------------------------------------------------
+// HandleUpload deals with chunk upload requests. It expects "fileName", "fileChunk", "progress" and "fileSize" form values.
+// It will not create a share if an upload is initiated with a share that isn't in the filesystem.
 func HandleUpload(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Println("Chunk upload request received :")
 
 	// Obtain shareId and Path from URL
 	shareId := r.URL.Query().Get("shareId")
-	
+
 	// Check if share exists
 	sharePath := path.Join("data", "share", shareId)
 	if _, err := os.Stat(sharePath); os.IsNotExist(err) {
@@ -59,10 +56,9 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
-
-	fmt.Println("Chunk uploaded!")
-
+	progress := r.FormValue("progress")
+	fileSize := r.FormValue("fileSize")
+	fmt.Printf("[%v/%v] Upload %v to %v\n", progress, fileSize, fileName, shareId)
 
 }
 

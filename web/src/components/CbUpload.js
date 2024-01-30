@@ -71,6 +71,8 @@ export function CbUpload({ loadFiles }) {
         const data = new FormData();
         data.append('fileName', file.name);
         data.append('fileChunk', chunk);
+        data.append('progress', end);
+        data.append('fileSize', file.size)
         data.append('shareId', shareId);
 
         let lastChunkSent = false;
@@ -112,6 +114,7 @@ export function CbUpload({ loadFiles }) {
             }
         };
 
+        // Should be done in backend
         if(shareId === undefined) {
             // Send a request to create a new share
             var request = new XMLHttpRequest();
