@@ -146,17 +146,19 @@ function handleIconPath(fileName) {
 }
 
 function handleDelete(shareId, fileName, loadFiles) {
-    var request = new XMLHttpRequest();
-    request.open('DELETE', `/api/delete?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`, true);
-    request.onload = function () {
-        if (request.status >= 200 && request.status < 400) {
-            loadFiles();
-        } else {
-            console.log(`Network response was not ok: ${request.status}`);
+    fetch(`/api/delete?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`, {
+        method: 'DELETE',
+    }).then(response => {
+            if (response.ok) {
+                loadFiles();
+            } else {
+                console.log(`Network response was not ok: ${response.status}`);
+            }
         }
-    }
-    request.send();
+        );
 }
+
+
 
 function handleDownload(shareId, fileName) {
     const downloadUrl = `/api/download?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`;

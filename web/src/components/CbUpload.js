@@ -77,10 +77,11 @@ export function CbUpload({ loadFiles }) {
 
         let lastChunkSent = false;
         // Create request and send it
-        var request = new XMLHttpRequest();
-        request.open('POST', `/api/upload?shareId=${encodeURIComponent(shareId)}`, true);
-        request.onreadystatechange = function () {
-            if (request.status >= 200 && request.status < 400) {
+        fetch(`/api/upload?shareId=${encodeURIComponent(shareId)}`, {
+            method: 'POST',
+            body: data,
+        }).then(response => {
+            if (response.ok) {
                 addNotification(uploadId, 1, start / file.size * 100);
                 start = end;
                 end = Math.min(end + chunkSize, file.size);
@@ -92,10 +93,9 @@ export function CbUpload({ loadFiles }) {
                 }
                 lastChunkSent = true
             } else {
-                console.log(`Error during upload of file ` + file.name + `. Please check your connection to the sever. err : ${request.status}`);
+                console.log(`Error during upload of file ` + file.name + `. Please check your connection to the sever. err : ${response.status}`);
             }
-        }
-        request.send(data);
+        });
     }
 
     const handleUpload = (files) => {
@@ -117,20 +117,20 @@ export function CbUpload({ loadFiles }) {
         // Should be done in backend
         if(shareId === undefined) {
             // Send a request to create a new share
-            var request = new XMLHttpRequest();
-            request.open('POST', `/api/create`, true);
-            request.onload = function () {
-                if (request.status >= 200 && request.status < 400) {
-                    var data = JSON.parse(this.response);
-                    shareId = data.shareId;
-                    navigate(`/share/${shareId}`);
-                    uploadNextFile();
+            fetch(`/api/create`, {
+                method: 'POST',
+            }).then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        shareId = data.shareId;
+                        navigate(`/share/${shareId}`);
+                        uploadNextFile();
+                    });
                 } else {
                     // Put a warning toast here
                     navigate('/')
                 }
-            }
-            request.send();
+            });
         } else {
             // Start uploading the first file
             uploadNextFile();
