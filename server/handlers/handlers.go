@@ -150,7 +150,7 @@ func HandleDelete(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(" Deleting file", fileName, "from share", shareId, "...")
 
 	// Delete file
-	err := os.Remove(filePath)
+	err := os.RemoveAll(filePath)
 	if err != nil {
 		fmt.Println(err)
 		return
