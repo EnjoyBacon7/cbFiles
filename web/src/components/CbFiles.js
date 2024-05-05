@@ -71,7 +71,7 @@ function CbFileList(props) {
             <InputGroup.Text>
                 <img src={handleIconPath(props.fileName)} alt='' width={30} />
             </InputGroup.Text>
-            <InputGroup.Text className='flex-grow-1 overflow-hidden'>
+            <InputGroup.Text className='fw-bold flex-grow-1 overflow-hidden'>
                 {props.fileName}
             </InputGroup.Text>
 
