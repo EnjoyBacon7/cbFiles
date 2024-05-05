@@ -1,2 +1,3 @@
-- Fixed download browser integration
-- Added automatic executable builds for Windows, Linux and MacOS
+- Added ability to delete uploaded folders (is that even a good idea?)
+- Changed fonts to Courier new
+- Moved from XMLHttpRequests to fetch api as XHR is now deprecated
