@@ -25,23 +25,22 @@ export function CbRoot({ isHome }) {
 
     function loadFiles() {
         const shareId_forLoad = window.location.pathname.split('/')[2]; // Use useRef instead?
-        var request = new XMLHttpRequest();
-        request.open('GET', `/api/search?shareId=${shareId_forLoad}`, true);
-        request.onload = function () {
-            if (request.status >= 200 && request.status < 400) {
-                var data = JSON.parse(this.response);
+
+        fetch(`/api/search?shareId=${shareId_forLoad}`, {
+            method: 'GET',
+        }).then(response => response.json())
+            .then(data => {
                 if (data.exists) {
                     setFileInfo(data.files);
                 } else {
                     // Put a warning toast here
                     navigate('/')
                 }
-            } else {
+            })
+            .catch((error) => {
                 // Put a warning toast here
                 navigate('/')
-            }
-        }
-        request.send();
+            });
     }
 
     useEffect(() => {

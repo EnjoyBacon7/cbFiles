@@ -11,7 +11,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import isSupported from '../supportedFileTypes';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-
 // ------------------------------------------------------------------
 // Files card parent component
 // ------------------------------------------------------------------
@@ -64,28 +63,45 @@ export default CbFiles;
 function CbFileList(props) {
 
     const shareId = window.location.pathname.split('/')[2];
+    const [deleteMode, setDeleteMode] = useState(false);
 
     return (
 
-        <InputGroup
-            className='mt-2'
-            style={{ flexWrap: 'nowrap' }}
-        >
+        <InputGroup className='mt-2' style={{ flexWrap: 'wrap' }}>
             <InputGroup.Text>
                 <img src={handleIconPath(props.fileName)} alt='' width={30} />
             </InputGroup.Text>
-            <InputGroup.Text className='flex-grow-1 overflow-hidden'>
+            <InputGroup.Text className='fw-bold flex-grow-1 overflow-hidden'>
                 {props.fileName}
             </InputGroup.Text>
+
             <Button variant='outline-secondary' onClick={() => handleDownload(shareId, props.fileName)}>
                 <DownloadSVG />
             </Button>
-            <Button variant='outline-danger' onClick={() => handleDelete(shareId, props.fileName, props.loadFiles)}>
-                <DeleteSVG />
-            </Button>
+
+            {!deleteMode && (
+                <Button variant='outline-danger' onClick={() => setDeleteMode(true)}>
+                    <DeleteSVG />
+                </Button>
+            )}
+
+            {deleteMode && (
+                <>
+                    <Button variant='outline-success' onClick={() => handleDelete(shareId, props.fileName, props.loadFiles)}>
+                        <ConfirmSVG />
+                    </Button>
+
+                    <Button variant='outline-danger' onClick={() => setDeleteMode(false)}>
+                        <CancelSVG />
+                    </Button>
+                </>
+            )}
+
         </InputGroup>
     );
 }
+
+
 
 
 
@@ -117,6 +133,7 @@ function CbFileGallery(props) {
                             <Button variant='outline-danger' onClick={() => handleDelete(shareId, props.fileName, props.loadFiles)}>
                                 <DeleteSVG />
                             </Button>
+
                         </ButtonGroup>
                     </div>
                 )}
@@ -146,17 +163,19 @@ function handleIconPath(fileName) {
 }
 
 function handleDelete(shareId, fileName, loadFiles) {
-    var request = new XMLHttpRequest();
-    request.open('DELETE', `/api/delete?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`, true);
-    request.onload = function () {
-        if (request.status >= 200 && request.status < 400) {
+    fetch(`/api/delete?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`, {
+        method: 'DELETE',
+    }).then(response => {
+        if (response.ok) {
             loadFiles();
         } else {
-            console.log(`Network response was not ok: ${request.status}`);
+            console.log(`Network response was not ok: ${response.status}`);
         }
     }
-    request.send();
+    );
 }
+
+
 
 function handleDownload(shareId, fileName) {
     const downloadUrl = `/api/download?shareId=${encodeURIComponent(shareId)}&fileName=${encodeURIComponent(fileName)}`;
@@ -207,6 +226,36 @@ function DeleteSVG() {
         >
             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+        </svg>
+    )
+}
+
+function ConfirmSVG() {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-check2"
+            viewBox="0 0 16 16"
+        >
+            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
+        </svg>
+    )
+}
+
+function CancelSVG() {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-x"
+            viewBox="0 0 16 16"
+        >
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
         </svg>
     )
 }

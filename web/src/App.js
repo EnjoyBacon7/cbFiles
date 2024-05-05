@@ -14,6 +14,8 @@ import CbVersion from './components/CbVersion';
 import { NotificationProvider } from './components/CbToastsContext';
 import CbToastsContainer from './components/CbToastsContainer';
 
+import './fonts.css';
+
 // Router Initialization
 const router = createBrowserRouter([
   {
@@ -31,7 +33,7 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <div className='mb-3'>
+    <div className='mb-3 courier-new'>
       <NotificationProvider>
         <Container fluid>
           <Row>
