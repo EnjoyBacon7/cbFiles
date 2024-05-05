@@ -202,7 +202,7 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-
+	fmt.Println(w)
 	fmt.Println("File sent!")
 }
 
