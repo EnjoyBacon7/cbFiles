@@ -58,8 +58,10 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 
 	progress := r.FormValue("progress")
 	fileSize := r.FormValue("fileSize")
-	fmt.Printf("[%v/%v] Upload %v to %v\n", progress, fileSize, fileName, shareId)
-
+	//fmt.Printf("[%v/%v] Upload %v to %v\n", progress, fileSize, fileName, shareId)
+	if progress == fileSize {
+		fmt.Println(" Upload complete")
+	}
 }
 
 // ------------------------------------------------------------
