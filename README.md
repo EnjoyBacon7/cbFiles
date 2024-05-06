@@ -11,7 +11,7 @@ Drag and drop your files on the drop zone to create a new Share. You can then sh
 
 The name of a share is not yet editable and is randomly generated using a random word api.
 
-Once on a share's page you can choose to download the files individually ~~or as a zip archive~~. You can also delete either individual files ~~or the whole share. Of course you may also search for a specific file by name.~~
+Once on a share's page you can choose to download the files individually ~~or as a zip archive~~. You can also delete either individual files ~~or the whole share.~~ Of course you may also search for a specific file by name.
 
 ![PjScreenshot](./example/screenshot.png)
 

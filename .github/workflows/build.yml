@@ -5,7 +5,7 @@ name: Build
 
 on:
   push:
-    branches: [ "release" ]
+    tags: 'v*'
 
 jobs:
 
@@ -88,21 +88,21 @@ jobs:
 
     needs: build-go
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
     steps:
+    - uses: actions/checkout@v3
+
 
     - name: Download cmds
       uses: actions/download-artifact@v2
       with:
-        name: build
+        name: cmd
         path: ./cmd
     - run: ls
 
-    - uses: actions/checkout@v3
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "cmd/*"
+        artifacts: "./cmd/*"
         bodyFile: "body.txt"
 
