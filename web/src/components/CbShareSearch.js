@@ -16,7 +16,6 @@ export function CbShareSearch() {
 
     // Redirect on submit
     function handleRedirect() {
-        fetch(`/api/share/${encodeURIComponent(shareId)}`)
         navigate(`/share/${encodeURIComponent(shareId)}`);
     }
 

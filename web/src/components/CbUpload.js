@@ -82,7 +82,7 @@ export function CbUpload({ loadFiles }) {
             body: data,
         }).then(response => {
             if (response.ok) {
-                addNotification(uploadId, 1, start / file.size * 100);
+                addNotification(uploadId, 1, start / file.size * 100, "");
                 start = end;
                 end = Math.min(end + chunkSize, file.size);
                 if (start !== end && !lastChunkSent) {

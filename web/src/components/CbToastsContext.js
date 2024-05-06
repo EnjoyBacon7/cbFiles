@@ -6,7 +6,7 @@ const NotificationContext = createContext();
 export function NotificationProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
 
-  const addNotification = (id, type, progress) => {
+  const addNotification = (id, type, progress, body) => {
 
     var header = ""
 
@@ -18,11 +18,14 @@ export function NotificationProvider({ children }) {
           header = "Upload in progress..."
         }
         break;
+      case 2: // Warning
+        header = "Warning"
+        break;
       default:
         break;
     }
 
-    const newNotification = { id, header, progress, age: Date.now() };
+    const newNotification = { id, header, progress, age: Date.now(), body, type};
     setNotifications([...notifications, newNotification]);
   };
 
