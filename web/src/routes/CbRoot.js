@@ -5,6 +5,9 @@
 // System imports
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
+
+import { useNotification } from "../components/CbToastsContext";
 
 // Local imports
 import CbUpload from "../components/CbUpload";
@@ -19,6 +22,7 @@ export function CbRoot({ isHome }) {
 
     // Useful hooks
     const navigate = useNavigate();
+    const { addNotification } = useNotification();
     // Hooks if in share
     const [viewMode, setViewMode] = useState("list");
     const [fileInfo, setFileInfo] = useState([]);
@@ -35,6 +39,11 @@ export function CbRoot({ isHome }) {
                     setFileInfo(data.files);
                 } else {
                     // Put a warning toast here
+                    addNotification(uuidv4(), 2, 0, "This share does not exist server-side.");
+                    // Remove the share from local storage (if it exists)
+                    var prevShares = JSON.parse(localStorage.getItem('recentShares')) || {};
+                    delete prevShares[shareId_forLoad];
+                    localStorage.setItem('recentShares', JSON.stringify(prevShares));
                     navigate('/')
                 }
             })
