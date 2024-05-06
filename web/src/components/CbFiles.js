@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Form from 'react-bootstrap/Form';
 
 // Local imports
 import isSupported from '../supportedFileTypes';
@@ -69,8 +70,9 @@ function CbFileList(props) {
 
         <InputGroup className='mt-2' style={{ flexWrap: 'wrap' }}>
             <InputGroup.Text>
-                <img src={handleIconPath(props.fileName)} alt='' width={30} />
+                <img src={handleIconPath(props.fileName)} alt='' height={20} />
             </InputGroup.Text>
+
             <InputGroup.Text className='fw-bold flex-grow-1 overflow-hidden'>
                 {props.fileName}
             </InputGroup.Text>
