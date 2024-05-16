@@ -56,6 +56,8 @@ jobs:
   # Building react
   build-npm:
   
+    needs: replace_version
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -97,7 +99,9 @@ jobs:
   # Building go code
   build-go:
 
-    needs: build-npm
+    needs: 
+      - build-npm
+      - replace_version
   
     runs-on: ubuntu-latest
     steps:
