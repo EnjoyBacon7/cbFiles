@@ -14,75 +14,85 @@ env:
 
 jobs:
 
-  replace_version_string:
+  replace_version:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
+      - uses: actions/checkout@v2
+
+      - name: Extract tag version
+        id: extract_tag
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
+      
       - name: Split tag
         id: split_tag
         run: |
           tag=${{ steps.extract_tag.outputs.tag }}
-          ver_emoji=$(echo $tag | cut -d '.' -f 1)
-          app_ver=$(echo $tag | cut -d '.' -f 2-)
-          echo "::set-output name=ver_emoji::$ver_emoji"
-          echo "::set-output name=app_ver::$app_ver"
+          prefix=$(echo $tag | cut -d '.' -f 1)
+          suffix=$(echo $tag | cut -d '.' -f 2-)
+          echo "::set-output name=prefix::$prefix"
+          echo "::set-output name=suffix::$suffix"
 
-      - name: Replace string
-        run: |
-          ver_emoji=${{ steps.split_tag.outputs.ver_emoji }}
-          app_ver=${{ steps.split_tag.outputs.app_ver }}
+      - name: Find and Replace Version Emoji
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "__APP_VER_EMOJI__"
+          replace: "$prefix"
+          regex: false
 
-          # Find all files containing the string
-          files=$(grep -rl "__APP_VER_EMOJI__" .)
+      - name: Find and Replace Version Number
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "__APP_VERSION__"
+          replace: "$suffix"
+          regex: false
 
-          # Replace string in each file
-          for file in $files; do
-            sed -i "s/__APP_VER_EMOJI__/$ver_emoji/g" $file
-          done
-
-          # Find all files containing the string
-          files=$(grep -rl "__APP_VERSION__" .)
-
-          # Replace string in each file
-          for file in $files; do
-            sed -i "s/__APP_VERSION__/$app_ver/g" $file
-          done
+      - name: Upload updated src code
+        uses: actions/upload-artifact@v2
+        with:
+          name: src
+          path: ./
 
   # Building react
   build-npm:
   
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./web/
-
     strategy:
       matrix:
         node-version: [18.x]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: './web/package-lock.json'
-    - run: npm ci
-    - run: npm run build --if-present
-    # To be implemented once tests are added
-    #- run: npm test --passWithNoTests
 
-    - name: Archive client build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: build
-        path: ./web/build
-    - run: ls
+      - name: Download updated src code
+        uses: actions/download-artifact@v2
+        with:
+          name: src
+          path: ./
+
+      - name: change dir
+        run: cd ./web/
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: './web/package-lock.json'
+
+      - run: npm ci
+
+      - run: npm run build --if-present
+      
+      # To be implemented once tests are added
+      #- run: npm test --passWithNoTests
+
+      - name: Archive client build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: ./web/build
+      - run: ls
 
   # Building go code
   build-go:
@@ -91,41 +101,45 @@ jobs:
   
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.21'
-
-    - name: Download client build artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: build
-        path: ./web/build
-
-    - name: Build
-      run: |
-        mkdir cmd
-        GOOS=linux GOARCH=arm64 go build -v -o cmd/cbFiles_linux_arm64 server/main.go
-        GOOS=linux GOARCH=amd64 go build -v -o cmd/cbFiles_linux_x64 server/main.go
-        GOOS=darwin GOARCH=arm64 go build -v -o cmd/cbFiles_macOS_arm64 server/main.go
-        GOOS=darwin GOARCH=amd64 go build -v -o cmd/cbFiles_macOS_x64 server/main.go
-        GOOS=windows GOARCH=amd64 go build -v -o cmd/cbFiles_windows_arm64 server/main.go
-        GOOS=windows GOARCH=arm go build -v -o cmd/cbFiles_windows_x64 server/main.go
-
-    # To implement once tests are in
-    #- name: Test
-    #  run: go test -v server main.go
-
-    - name: Archive cmds
-      uses: actions/upload-artifact@v2
-      with:
-        name: cmd
-        path: ./cmd
-    - run: ls
     
+      - name: Download updated src code
+        uses: actions/download-artifact@v2
+        with:
+          name: src
+          path: ./
 
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Download client build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: ./web/build
+
+      - name: Build
+        run: |
+          mkdir cmd
+          GOOS=linux GOARCH=arm64 go build -v -o cmd/cbFiles_linux_arm64 server/main.go
+          GOOS=linux GOARCH=amd64 go build -v -o cmd/cbFiles_linux_x64 server/main.go
+          GOOS=darwin GOARCH=arm64 go build -v -o cmd/cbFiles_macOS_arm64 server/main.go
+          GOOS=darwin GOARCH=amd64 go build -v -o cmd/cbFiles_macOS_x64 server/main.go
+          GOOS=windows GOARCH=amd64 go build -v -o cmd/cbFiles_windows_arm64 server/main.go
+          GOOS=windows GOARCH=arm go build -v -o cmd/cbFiles_windows_x64 server/main.go
+
+      # To implement once tests are in
+      #- name: Test
+      #  run: go test -v server main.go
+
+      - name: Archive cmds
+        uses: actions/upload-artifact@v2
+        with:
+          name: cmd
+          path: ./cmd
+      - run: ls
+    
   release:
 
     needs: build-go
@@ -134,7 +148,6 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v3
-
 
     - name: Download cmds
       uses: actions/download-artifact@v2
