@@ -1,2 +1,1 @@
-- Lessened serverside logging for uploading
-- Added a recently accessed shares list to the home page
+- Added Docker image
