@@ -1,18 +1,17 @@
-FROM node AS node
+FROM node AS web_build
 WORKDIR /web
-ADD web/package.json web/package-lock.json ./
-RUN npm install;
 ADD web/ .
+RUN npm install;
 RUN npm run build
 
-FROM golang AS golang
+FROM golang AS go_build
 WORKDIR /
 ADD . /
-COPY --from=node /web/build/ /web/build/
+COPY --from=web_build /web/build/ /web/build/
 RUN CGO_ENABLED=0 go build -o /cbFiles server/main.go
 
 FROM scratch
-COPY --from=golang /cbFiles /cbFiles
+COPY --from=go_build /cbFiles /cbFiles
 
 EXPOSE 8080
 

@@ -14,6 +14,43 @@ env:
 
 jobs:
 
+  replace_version_string:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Split tag
+        id: split_tag
+        run: |
+          tag=${{ steps.extract_tag.outputs.tag }}
+          ver_emoji=$(echo $tag | cut -d '.' -f 1)
+          app_ver=$(echo $tag | cut -d '.' -f 2-)
+          echo "::set-output name=ver_emoji::$ver_emoji"
+          echo "::set-output name=app_ver::$app_ver"
+
+      - name: Replace string
+        run: |
+          ver_emoji=${{ steps.split_tag.outputs.ver_emoji }}
+          app_ver=${{ steps.split_tag.outputs.app_ver }}
+
+          # Find all files containing the string
+          files=$(grep -rl "__APP_VER_EMOJI__" .)
+
+          # Replace string in each file
+          for file in $files; do
+            sed -i "s/__APP_VER_EMOJI__/$ver_emoji/g" $file
+          done
+
+          # Find all files containing the string
+          files=$(grep -rl "__APP_VERSION__" .)
+
+          # Replace string in each file
+          for file in $files; do
+            sed -i "s/__APP_VERSION__/$app_ver/g" $file
+          done
+
   # Building react
   build-npm:
   
