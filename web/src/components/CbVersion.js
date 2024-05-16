@@ -23,7 +23,7 @@ export function CbVersion() {
             <Card.Body>
                 <Card.Text className='text-center'>
 
-                    Version <a href='http://www.staggeringbeauty.com' style={{textDecoration: 'none'}}>🦄</a>.0.2.1
+                    Version <a href='http://www.staggeringbeauty.com' style={{textDecoration: 'none'}}>&#x__APP_VER_EMOJI__;</a>.__APP_VERSION__
 
                 </Card.Text>
             </Card.Body>

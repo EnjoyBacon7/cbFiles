@@ -1,6 +1,5 @@
 FROM node AS web_build
 WORKDIR /web
-#ADD web/package.json web/package-lock.json ./
 ADD web/ .
 RUN npm install;
 RUN npm run build
