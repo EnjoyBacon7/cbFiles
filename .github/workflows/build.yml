@@ -37,14 +37,14 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "__APP_VER_EMOJI__"
-          replace: $prefix
+          replace: ${{ steps.split_tag.outputs.prefix }}
           regex: false
 
       - name: Find and Replace Version Number
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "__APP_VERSION__"
-          replace: $suffix
+          replace: ${{ steps.split_tag.outputs.suffix }}
           regex: false
 
       - name: Upload updated src code
