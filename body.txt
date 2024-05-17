@@ -1,1 +1,1 @@
-- Added Docker image
+- Added automatic version replacing using release tag
