@@ -28,8 +28,9 @@ jobs:
         id: split_tag
         run: |
           tag=${{ steps.extract_tag.outputs.tag }}
-          prefix=$(echo $tag | cut -d '.' -f 1)
-          suffix=$(echo $tag | cut -d '.' -f 2-)
+          tag_without_v=$(echo $tag | sed 's/^v//')
+          prefix=$(echo $tag_without_v | cut -d '.' -f 1)
+          suffix=$(echo $tag_without_v | cut -d '.' -f 2-)
           echo "::set-output name=prefix::$prefix"
           echo "::set-output name=suffix::$suffix"
 
@@ -207,6 +208,7 @@ jobs:
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
+          platforms: linux/amd64,linux/arm64, darwin/arm64, darwin/amd64, windows/arm64, windows/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

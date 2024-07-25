@@ -1,1 +1,2 @@
-- Added automatic version replacing using release tag
+- Added automatic build for arm devices.
+- Fixed version emoji not appearing correctly
