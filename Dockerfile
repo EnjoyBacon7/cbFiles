@@ -1,10 +1,12 @@
-FROM node AS web_build
+# Use a multi-stage build for Node.js
+FROM --platform=$BUILDPLATFORM node:18 AS web_build
 WORKDIR /web
 ADD web/ .
-RUN npm install;
+RUN npm install
 RUN npm run build
 
-FROM golang AS go_build
+# Use a multi-stage build for Go
+FROM --platform=$BUILDPLATFORM golang:1.21 AS go_build
 WORKDIR /
 ADD . /
 COPY --from=web_build /web/build/ /web/build/
