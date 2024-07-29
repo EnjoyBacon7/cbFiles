@@ -1,2 +1,1 @@
-- Added automatic build for arm devices.
-- Fixed version emoji not appearing correctly
+- Fixed missing web certificates blocking share creation
