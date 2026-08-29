@@ -17,7 +17,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 	shareId := r.URL.Query().Get("shareId")
 
 	// Check if share exists
-	sharePath := path.Join("data", "share", shareId)
+	sharePath := path.Join("data", "share", path.Join("/", shareId))
 	if _, err := os.Stat(sharePath); os.IsNotExist(err) {
 		fmt.Println(" The share does not exist, creation is done from Home page. Canceling upload")
 		return
@@ -40,7 +40,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 	}
 	defer fileChunk.Close()
 
-	tempFilePath := path.Join(sharePath, fileName)
+	tempFilePath := path.Join(sharePath, path.Join("/", fileName))
 	tempFile, err := os.OpenFile(tempFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println(" Error opening or creating temp file :")
@@ -73,7 +73,7 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 
 	// Obtain shareId and Path from URL
 	shareId := r.URL.Query().Get("shareId")
-	sharePath := path.Join("data", "share", shareId)
+	sharePath := path.Join("data", "share", path.Join("/", shareId))
 
 	fmt.Println(" Searching for share", shareId)
 
@@ -143,11 +143,11 @@ func HandleDelete(w http.ResponseWriter, r *http.Request) {
 
 	// Obtain shareId and Path from URL
 	shareId := r.URL.Query().Get("shareId")
-	sharePath := path.Join("data", "share", shareId)
+	sharePath := path.Join("data", "share", path.Join("/", shareId))
 
 	// Obtain fileName and filePath from URL
 	fileName := r.URL.Query().Get("fileName")
-	filePath := path.Join(sharePath, fileName)
+	filePath := path.Join(sharePath, path.Join("/", fileName))
 
 	fmt.Println(" Deleting file", fileName, "from share", shareId, "...")
 
@@ -170,11 +170,11 @@ func HandleDownload(w http.ResponseWriter, r *http.Request) {
 
 	// Obtain shareId and Path from URL
 	shareId := r.URL.Query().Get("shareId")
-	sharePath := path.Join("data", "share", shareId)
+	sharePath := path.Join("data", "share", path.Join("/", shareId))
 
 	// Obtain fileName and filePath from URL
 	fileName := r.URL.Query().Get("fileName")
-	filePath := path.Join(sharePath, fileName)
+	filePath := path.Join(sharePath, path.Join("/", fileName))
 
 	fmt.Println(" Downloading file", fileName, "from share", shareId, "...")
 
@@ -264,7 +264,7 @@ func HandleCreate(w http.ResponseWriter, r *http.Request) {
 
 	// ...and send it
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(responseJSON)
+	_, _ = w.Write(responseJSON)
 
 	fmt.Println("Share created!")
 }

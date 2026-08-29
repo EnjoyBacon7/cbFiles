@@ -20,7 +20,7 @@ function CbToastsContainer() {
     return (
         <ToastContainer className="p-3" position='bottom-end'>
             {notifications.map((notification) => (
-                <Toast onClose={() => { removeNotification(notification.id) }}>
+                <Toast key={notification.id} onClose={() => { removeNotification(notification.id) }}>
                     <Toast.Header>
                         <strong className="me-auto">{notification.header}</strong>
                         <small>

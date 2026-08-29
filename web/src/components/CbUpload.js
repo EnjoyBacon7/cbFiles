@@ -82,7 +82,6 @@ export function CbUpload({ loadFiles }) {
             body: data,
         }).then(response => {
             if (response.ok) {
-                addNotification(uploadId, 1, start / file.size * 100, "");
                 start = end;
                 end = Math.min(end + chunkSize, file.size);
                 if (start !== end && !lastChunkSent) {
@@ -92,6 +91,8 @@ export function CbUpload({ loadFiles }) {
                     callback();
                 }
                 lastChunkSent = true
+                
+                addNotification(uploadId, 1, start / file.size * 100, "");
             } else {
                 console.log(`Error during upload of file ` + file.name + `. Please check your connection to the sever. err : ${response.status}`);
             }
